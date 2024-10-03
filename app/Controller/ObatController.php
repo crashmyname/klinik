@@ -21,7 +21,7 @@ class ObatController
 
     public function index()
     {
-        View::render('dashboard',[],'navbar/navbar');
+        return View::render('dashboard',[],'navbar/navbar');
     }
 
     public function obat()
@@ -34,7 +34,12 @@ class ObatController
             ->get();
             return DataTables::of($obat)->make(true);
         }
-        View::render('obat/obat',['title'=>$title],'navbar/navbar');
+        $listobat = Obat::query()
+                        ->select('id_obat','nama_obat','factory')
+                        ->orderBy('nama_obat','asc')
+                        ->orderBy('factory','asc')
+                        ->get();
+        return View::render('obat/obat',['title'=>$title,'listobat'=>$listobat],'navbar/navbar');
     }
 
     public function addObat(Request $request)
@@ -58,7 +63,6 @@ class ObatController
                 'modify_by' => Session::user()->nama_user,
             ]);
             return Response::json(['status'=>200,'message'=>'Berhasil']);
-            // return Response::success('Obat berhasil ditambahkan.');
         } else {
             return response()->json(['status' => 500, 'message' => 'Failed to upload file.']);
         }
@@ -68,15 +72,42 @@ class ObatController
     {
         $obat = Obat::find($id);
         $obat->nama_obat = $request->nama_obat;
+        $obat->keluhan = $request->keluhan;
+        $obat->dosis = $request->dosis;
+        if($request->jenis){
+            $obat->jenis = $request->jenis;
+        }
+        if($request->factory){
+            $obat->factory = $request->factory;
+        }
+        if($obat->foto){
+            $path = storage_path('obat');
+            if(!file_exists($path)){
+                mkdir($path,0777,true);
+            }
+            $oldFilePath = $path . '/' . $obat->foto;
+            if (file_exists($oldFilePath)) {
+                unlink($oldFilePath);
+            }
+            $obat->foto = $request->getClientOriginalName('foto');
+            $tempPath = $request->getPath('foto');
+            $destination = $path . '/' . $obat->foto;
+            move_uploaded_file($tempPath,$destination);
+        }
         $obat->save();
-        View::redirectTo('/obat');
+        return View::redirectTo('/obat');
     }
 
     public function deleteObat($id)
     {
         $obat = Obat::find($id);
+        $path = storage_path('obat');
+        $filePath = $path . '/' . $obat->foto;
+        if(file_exists($filePath)){
+            unlink($filePath);
+        }
         $obat->delete();
-        View::redirectTo('/obat');
+        return Response::json(['status'=>200,'message'=>'berhasil']);
     }
 }
 

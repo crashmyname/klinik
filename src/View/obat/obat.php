@@ -41,7 +41,7 @@
                                         <div class="card-content">
                                             <div class="card-body">
                                                 <form class="form form-horizontal" method="post"
-                                                    enctype="multipart/form-data" action="<?= base_url() ?>/obat">
+                                                    enctype="multipart/form-data" action="" id="formobat">
                                                     <div class="form-body">
                                                         <div class="row">
                                                             <div class="col-md-4">
@@ -107,8 +107,8 @@
                                                             </div>
                                                             <div class="col-sm-12 d-flex justify-content-end">
                                                                 <button type="submit"
-                                                                    class="btn btn-primary me-1 mb-1" name="simpan"
-                                                                    onclick="return confirm('Apakah data yang anda masukkan sudah benar?')">Submit</button>
+                                                                    class="btn btn-primary me-1 mb-1" id="tambahobat"
+                                                                    name="simpan">Submit</button>
                                                                 <button type="reset"
                                                                     class="btn btn-light-secondary me-1 mb-1">Reset</button>
                                                             </div>
@@ -158,7 +158,7 @@
                                         <div class="card-content">
                                             <div class="card-body">
                                                 <form class="form form-horizontal" method="post"
-                                                    enctype="multipart/form-data" action="">
+                                                    enctype="multipart/form-data" action="<?= base_url()?>/sobat">
                                                     <div class="form-body">
                                                         <div class="row">
                                                             <div class="col-md-4">
@@ -167,8 +167,13 @@
                                                             <div class="col-md-8 form-group">
                                                                 <select type="text" name="id_obat"
                                                                     class="form-control" required>
-                                                                    <option value=""> - </option>
-
+                                                                    <option value="" disabled selected hidden>
+                                                                        Pilih Obat </option>
+                                                                    <?php foreach($listobat as $obat): ?>
+                                                                    <option value="<?= $obat['id_obat'] ?>">
+                                                                        <?= $obat['nama_obat'] ?> (FACT
+                                                                        <?= $obat['factory'] ?>)</option>
+                                                                    <?php endforeach; ?>
                                                                 </select>
                                                             </div>
                                                             <div class="col-md-4">
@@ -261,7 +266,8 @@
                                         <div class="card-content">
                                             <div class="card-body">
                                                 <form class="form form-horizontal" method="post"
-                                                    enctype="multipart/form-data" action="" id="formEditPemakaian">
+                                                    enctype="multipart/form-data" action=""
+                                                    id="formEditPemakaian">
                                                     <div class="form-body">
                                                         <div class="row">
                                                             <div class="col-md-4">
@@ -389,10 +395,68 @@
             </div>
         </footer>
     </div>
+    <script src="<?= module('sweetalert2/dist/sweetalert2.all.min.js') ?>"></script>
     <script type="text/javascript">
+        function confirmDelete(url) {
+                // Menampilkan SweetAlert
+                Swal.fire({
+                    title: 'Apakah Anda yakin?',
+                    text: "Data ini akan dihapus secara permanen!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Ya, Hapus!',
+                    cancelButtonText: 'Batal'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            type: 'POST',
+                            url: url,
+                            dataType: 'json',
+                            contentType: false,
+                            processData: false,
+                            success: function(response) {
+                                if (response.status === 200) {
+                                    Swal.fire({
+                                        title: 'success',
+                                        icon: 'success',
+                                        text: 'Data berhasil dihapus',
+                                        showConfirmButton: false,
+                                        timer: 1500,
+                                        timerProgressBar: true,
+                                    })
+                                    dataTable.ajax.reload();
+                                } else {
+                                    Swal.fire({
+                                        title: 'error',
+                                        icon: 'Error',
+                                        text: 'Data gagal dihapus',
+                                        showConfirmButton: false,
+                                        timer: 1500,
+                                        timerProgressBar: true,
+                                    })
+                                }
+                            },
+                            error: function(error) {
+                                console.error(error);
+                                Swal.fire({
+                                    title: 'Error',
+                                    icon: 'error',
+                                    text: 'Terjadi kesalahan saat menghapus data',
+                                    showConfirmButton: false,
+                                    timer: 1500,
+                                    timerProgressBar: true,
+                                });
+                            }
+                        })
+                    }
+                });
+            }
+        var dataTable;
         $(document).ready(function() {
             var prefix = "<?= base_url() ?>";
-            var dataTable = $('#datatable').DataTable({
+            dataTable = $('#datatable').DataTable({
                 processing: true,
                 serverSide: true,
                 ajax: prefix + '/obat',
@@ -445,7 +509,7 @@
                             var udosis = row.dosis;
                             var ujenis = row.jenis;
                             var ufactory = row.factory;
-                            
+                            var encID = btoa(data);
                             return `
                                 <button class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#modalEditPemakaian" 
                                 onclick="fillModal('${data}','${unama_obat}', '${ukeluhan}', '${udosis}', '${ujenis}', '${ufactory}')"
@@ -456,7 +520,9 @@
                                     <path fill-rule="evenodd"
                                         d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z" />
                                 </svg></button>
-                            <a href="${src}/dobat?id=${data}" class="btn btn-danger btn-sm"><i class="bi bi-trash"></i></a>
+                            <a href="#" onclick="confirmDelete('${src}/dobat?id=${encID}')" class="btn btn-danger btn-sm">
+                                <i class="bi bi-trash"></i>
+                            </a>
                         `;
                         },
                     },
@@ -508,7 +574,58 @@
                     }
                 ]
             });
+            $('#tambahobat').on('click', function(e) {
+                e.preventDefault();
+                var formData = new FormData($('#formobat')[0]);
+                Swal.fire({
+                    title: 'Add',
+                    icon: 'warning',
+                    text: 'Apakah yakin ingin tambah data?',
+                    showCancelButton: true,
+                    confirmButtonText: 'Ya, Tambah!!',
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            url: '<?= base_url() ?>/obat',
+                            type: 'POST',
+                            dataType: 'json',
+                            processData: false, // Jangan memproses data
+                            contentType: false,
+                            data: formData,
+                            success: function(response) {
+                                if (response.status === 200) {
+                                    Swal.fire({
+                                        title: 'Success',
+                                        icon: 'success',
+                                        text: 'Obat berhasil ditambah',
+                                    });
+                                    dataTable.ajax.reload();
+                                    $('#formobat')[0].reset();
+                                } else {
+                                    Swal.fire({
+                                        title: 'Error',
+                                        icon: 'error',
+                                        text: 'Gagal membuat obat',
+                                    })
+                                }
+                            },
+                            error: function(error) {
+                                console.error(error);
+                                Swal.fire({
+                                    title: 'error',
+                                    icon: 'error',
+                                    text: 'Terjadi kesalahan saat memperbarui data',
+                                    showConfirmButton: false,
+                                    timer: 1500,
+                                    timerProgressBar: true,
+                                });
+                            }
+                        });
+                    }
+                });
+            });
         });
+
         function fillModal(id, nama_obat, keluhan, dosis, jenis, factory) {
             document.getElementById('unama_obat').value = nama_obat;
             document.getElementById('ukeluhan').value = keluhan;
@@ -518,5 +635,4 @@
             var formAction = "<?= base_url() ?>/uobat?id=" + id;
             document.getElementById('formEditPemakaian').action = formAction;
         }
-
     </script>

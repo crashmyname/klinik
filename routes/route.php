@@ -15,6 +15,7 @@ use App\Controller\McuController;
 use App\Controller\ObatController;
 use App\Controller\PemakaianController;
 use App\Controller\UserController;
+use App\Controller\StockController;
 
 $request = new Request();
 $route = new Route($prefix);
@@ -26,6 +27,7 @@ $homeController = new HomeController();
 $alatController = new AlatController();
 $hwController = new HwController();
 $mcuController = new McuController();
+$stockController = new StockController();
 
 handleMiddleware();
 
@@ -64,8 +66,11 @@ $route->post('/uobat', function() use ($obatController, $request){
     $id = $request->id;
     $obatController->updateObat($request,$id);
 });
-$route->get('/dobat', function() use ($obatController, $request){
-    $id = $request->id;
+$route->post('/sobat', function() use ($stockController, $request){
+    $stockController->addStock($request);
+});
+$route->post('/dobat', function() use ($obatController, $request){
+    $id = base64_decode($request->id);
     $obatController->deleteObat($id);
 });
 $route->get('/pemakaian-obat', function() use ($pemakaianController){
