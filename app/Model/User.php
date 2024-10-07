@@ -7,5 +7,5 @@ class User extends BaseModel
 {
     // Model logic here
     public $table = 'tb_user';
-    protected $primaryKey = 'user_id';
+    protected $primaryKey = 'id_user';
 }

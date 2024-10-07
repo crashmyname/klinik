@@ -7,6 +7,7 @@ use App\Model\Obat;
 use App\Model\Pemakaian;
 use App\Model\RestEmp;
 use App\Model\User;
+use Support\Auth;
 use Support\Date;
 use Support\Request;
 use Support\Session;
@@ -48,13 +49,12 @@ class HomeController
                 ->first();
         if($user){
             Session::set('user',[
-                'user_id' => $user['user_id'],
-                'username' => $user['username'],
-                'nama_user' => $user['nama_user'],
-                'level' => $user['level'],
-                'foto' => $user['foto']
+                'id_user' => $user->id_user,
+                'username' => $user->username,
+                'nama_user' => $user->nama_user,
+                'level' => $user->level,
+                'foto' => $user->foto
             ]);
-            // $_SESSION['username'] = $user->username;
             View::redirectTo('/home');
         } else {
             Session::set('error', 'Invalid Credentials');

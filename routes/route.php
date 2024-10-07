@@ -45,10 +45,6 @@ $route->post('/logout', function() use ($homeController) {
     $homeController->logout();
 });
 
-$route->get('/testi', function() use ($pemakaianController){
-    $pemakaianController->test();
-});
-
 // HOME
 $route->get('/home', function() use ($homeController){
     AuthMiddleware::checkLogin();
@@ -57,45 +53,46 @@ $route->get('/home', function() use ($homeController){
 
 // OBAT
 $route->get('/obat', function() use ($obatController){
+    AuthMiddleware::checkLogin();
     $obatController->obat();
 });
 $route->post('/obat', function() use ($obatController, $request){
+    AuthMiddleware::checkLogin();
     $obatController->addObat($request);
 });
 $route->post('/uobat', function() use ($obatController, $request){
+    AuthMiddleware::checkLogin();
     $id = $request->id;
     $obatController->updateObat($request,$id);
 });
 $route->post('/sobat', function() use ($stockController, $request){
+    AuthMiddleware::checkLogin();
     $stockController->addStock($request);
 });
 $route->post('/dobat', function() use ($obatController, $request){
+    AuthMiddleware::checkLogin();
     $id = base64_decode($request->id);
     $obatController->deleteObat($id);
 });
 $route->get('/pemakaian-obat', function() use ($pemakaianController){
+    AuthMiddleware::checkLogin();
     $pemakaianController->pemakaian();
 });
 $route->get('/data-alat', function() use ($alatController){
+    AuthMiddleware::checkLogin();
     $alatController->alat();
 });
 $route->get('/data-user', function() use ($userController, $request){
+    AuthMiddleware::checkLogin();
     $userController->index($request);
 });
 $route->get('/data-hw', function() use ($hwController){
+    AuthMiddleware::checkLogin();
     $hwController->hw();
 });
 $route->get('/data-mcu', function() use ($mcuController){
+    AuthMiddleware::checkLogin();
     $mcuController->mcu();
-});
-$route->get('/getobat', function() use ($obatController){
-    $obatController->getObat();
-});
-
-// User
-$route->get('/user', function() use ($userController) {
-    AuthMiddleware::checkLogin(); //<-- Cara pemanggilannya
-    $userController->index();
 });
 
 // Menjalankan route
