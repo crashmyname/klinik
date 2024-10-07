@@ -43,22 +43,37 @@ class HomeController
 
     public function onLogin(Request $request)
     {
-        $user = User::query()
-                ->where('username','=',$request->username)
-                ->where('password','=',md5($request->password))
-                ->first();
-        if($user){
-            Session::set('user',[
-                'id_user' => $user->id_user,
-                'username' => $user->username,
-                'nama_user' => $user->nama_user,
-                'level' => $user->level,
-                'foto' => $user->foto
-            ]);
-            View::redirectTo('/home');
+        $data = [
+            'username' => $request->username,
+            'password' => $request->password
+        ];
+
+        $rule = [
+            'username' => 'required',
+            'password' => 'required'
+        ];
+        $error = $this->validator->validate($data, $rule);
+        if($error){
+            Session::set('error', 'Username atau password tidak boleh kosong.');
+            return View::redirectTo('/login');
         } else {
-            Session::set('error', 'Invalid Credentials');
-            View::redirectTo('/login');
+            $user = User::query()
+                    ->where('username','=',$data['username'])
+                    ->where('password','=',md5($data['password']))
+                    ->first();
+            if($user){
+                Session::set('user',[
+                    'id_user' => $user->id_user,
+                    'username' => $user->username,
+                    'nama_user' => $user->nama_user,
+                    'level' => $user->level,
+                    'foto' => $user->foto
+                ]);
+                View::redirectTo('/home');
+            } else {
+                Session::set('error', 'Invalid Credentials');
+                View::redirectTo('/login');
+            }
         }
     }
 

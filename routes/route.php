@@ -82,9 +82,25 @@ $route->get('/data-alat', function() use ($alatController){
     AuthMiddleware::checkLogin();
     $alatController->alat();
 });
+
+// USER
 $route->get('/data-user', function() use ($userController, $request){
     AuthMiddleware::checkLogin();
     $userController->index($request);
+});
+$route->post('/data-user', function() use($userController, $request){
+    AuthMiddleware::checkLogin();
+    $userController->addUser($request);
+});
+$route->post('/udata-user', function() use($userController, $request){
+    AuthMiddleware::checkLogin();
+    $id = base64_decode($request->id);
+    $userController->updateUser($request, $id);
+});
+$route->post('/ddata-user', function() use($userController, $request){
+    AuthMiddleware::checkLogin();
+    $id = base64_decode($request->id);
+    $userController->deleteUser($id);
 });
 $route->get('/data-hw', function() use ($hwController){
     AuthMiddleware::checkLogin();

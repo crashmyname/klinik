@@ -187,10 +187,21 @@
             background: #4520ff;
         }
     </style>
+    <script src="<?= module('sweetalert2/dist/sweetalert2.all.min.js')?>"></script>
 </head>
 
 <body>
-
+    <?php if ($errormessage = \Support\Session::get('error')): ?>
+        <script>
+            Swal.fire({
+                title: 'Error!',
+                text: '<?= $errormessage?>',
+                icon: 'error',
+                confirmButtonText: 'OK'
+            });
+        </script>
+        <?php \Support\Session::unset('error'); // Menghapus pesan error setelah ditampilkan ?>
+    <?php endif; ?>
     <div class="LoginPageContainer">
         <div class="LoginPageInnerContainer">
             <div class="ImageContianer">

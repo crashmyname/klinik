@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 use Support\DataTables;
+use Support\Date;
 use Support\Response;
 use Support\Request;
 use Support\Validator;
@@ -14,7 +15,6 @@ class UserController
     protected $validator;
     public function __construct()
     {
-        // $this->userModel = new UserModel();
         $this->validator = new Validator();
     }
     public function index(Request $request)
@@ -26,37 +26,69 @@ class UserController
         View::render('user/user',[],'navbar/navbar');
     }
 
-    public function loginapi()
+    public function addUser(Request $request)
     {
-        $request = new Request();
-        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-            $data = [
-                'email' => $request->email,
-                'password' => $request->password
-            ];
-
-            $rule = [
-                'email' => 'required',
-                'password' => 'required'
-            ];
-            
-            $error = $this->validator->validate($data, $rule);
-            if ($error) {
-                View::render('login', ['errors' => $error]);
-            } else {
-                $user = User::query()->where('email', '=', $data['email'])->first();
-                if ($user) {
-                    if (password_verify($data['password'],$user['password'])) {
-                        // Generate token
-                        $token = bin2hex(random_bytes(32));
-                        $_SESSION['token'] = $token;
-                        header('Content-Type: application/json');
-                        echo json_encode(['token' => $token]);
-                    }
-                } else {
-                    echo json_encode(['error' => 'Email atau password salah!!!!!!']);
-                }
-            }
+        $path = storage_path('user');
+        if(!file_exists($path)){
+            mkdir($path, 0777, true);
         }
+        $realname = $request->getClientOriginalName('foto');
+        $tempPath = $request->getPath('foto');
+        $destination = $path . '/' . $realname;
+        if(move_uploaded_file($tempPath,$destination)){
+            User::create([
+                'nama_user' => $request->nama_user,
+                'username' => $request->username,
+                'password' => md5($request->password),
+                'level' => $request->level,
+                'foto' => $request->getClientOriginalName('foto')
+            ]);
+            return Response::json(['status'=> 200]);
+        } else {
+            return Response::json(['status'=>500]);
+        }
+    }
+
+    public function updateUser(Request $request, $id)
+    {
+        $user = User::find($id);
+        $user->nama_user = $request->nama_user;
+        $user->username = $request->username;
+        if($request->password == ''){
+            $user->password;
+        } else {
+            $user->password = md5($request->password);
+        }
+        $user->level = $request->level;
+        if($user->foto){
+            $path = storage_path('user');
+            if(!file_exists($path)){
+                mkdir($path,0777,true);
+            }
+            $oldFile = $path . '/' . $user->foto;
+            if(file_exists($oldFile)){
+                unlink($oldFile);
+            }
+            $user->foto = $request->getClientOriginalName('foto');
+            $tempPath = $request->getPath('foto');
+            $destination = $path . '/' . $user->foto;
+            move_uploaded_file($tempPath,$destination);
+        }
+        $user->updated_at = Date::now();
+        $user->save();
+        return Response::json(['status'=>200,'message'=>'success']);
+    }
+
+    public function deleteUser($id)
+    {
+        $user = User::find($id);
+        // pretty_print($user);
+        $path = storage_path('user');
+        $oldFile = $path . '/' . $user->foto;
+        if(file_exists($oldFile)){
+            unlink($oldFile);
+        }
+        $user->delete();
+        return Response::json(['status'=>200,'message'=>'deleted']);
     }
 }

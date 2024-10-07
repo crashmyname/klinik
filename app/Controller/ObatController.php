@@ -64,7 +64,7 @@ class ObatController
             ]);
             return Response::json(['status'=>200,'message'=>'Berhasil']);
         } else {
-            return response()->json(['status' => 500, 'message' => 'Failed to upload file.']);
+            return Response::json(['status' => 500, 'message' => 'Failed to upload file.']);
         }
     }
 
