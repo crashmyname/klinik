@@ -158,7 +158,7 @@
                                         <div class="card-content">
                                             <div class="card-body">
                                                 <form class="form form-horizontal" method="post"
-                                                    enctype="multipart/form-data" action="<?= base_url()?>/sobat">
+                                                    enctype="multipart/form-data" action="<?= base_url() ?>/sobat">
                                                     <div class="form-body">
                                                         <div class="row">
                                                             <div class="col-md-4">
@@ -334,7 +334,7 @@
                                                             <div class="col-sm-12 d-flex justify-content-end">
                                                                 <button type="submit"
                                                                     class="btn btn-primary me-1 mb-1" name="simpan"
-                                                                    onclick="return confirm('Apakah data yang anda masukkan sudah benar?')">Submit</button>
+                                                                    id="btn-update">Submit</button>
                                                                 <button type="reset"
                                                                     class="btn btn-light-secondary me-1 mb-1">Reset</button>
                                                             </div>
@@ -398,61 +398,61 @@
     <script src="<?= module('sweetalert2/dist/sweetalert2.all.min.js') ?>"></script>
     <script type="text/javascript">
         function confirmDelete(url) {
-                // Menampilkan SweetAlert
-                Swal.fire({
-                    title: 'Apakah Anda yakin?',
-                    text: "Data ini akan dihapus secara permanen!",
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#3085d6',
-                    cancelButtonColor: '#d33',
-                    confirmButtonText: 'Ya, Hapus!',
-                    cancelButtonText: 'Batal'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        $.ajax({
-                            type: 'POST',
-                            url: url,
-                            dataType: 'json',
-                            contentType: false,
-                            processData: false,
-                            success: function(response) {
-                                if (response.status === 200) {
-                                    Swal.fire({
-                                        title: 'success',
-                                        icon: 'success',
-                                        text: 'Data berhasil dihapus',
-                                        showConfirmButton: false,
-                                        timer: 1500,
-                                        timerProgressBar: true,
-                                    })
-                                    dataTable.ajax.reload();
-                                } else {
-                                    Swal.fire({
-                                        title: 'error',
-                                        icon: 'Error',
-                                        text: 'Data gagal dihapus',
-                                        showConfirmButton: false,
-                                        timer: 1500,
-                                        timerProgressBar: true,
-                                    })
-                                }
-                            },
-                            error: function(error) {
-                                console.error(error);
+            // Menampilkan SweetAlert
+            Swal.fire({
+                title: 'Apakah Anda yakin?',
+                text: "Data ini akan dihapus secara permanen!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Ya, Hapus!',
+                cancelButtonText: 'Batal'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        type: 'POST',
+                        url: url,
+                        dataType: 'json',
+                        contentType: false,
+                        processData: false,
+                        success: function(response) {
+                            if (response.status === 200) {
                                 Swal.fire({
-                                    title: 'Error',
-                                    icon: 'error',
-                                    text: 'Terjadi kesalahan saat menghapus data',
+                                    title: 'success',
+                                    icon: 'success',
+                                    text: 'Data berhasil dihapus',
                                     showConfirmButton: false,
                                     timer: 1500,
                                     timerProgressBar: true,
-                                });
+                                })
+                                dataTable.ajax.reload();
+                            } else {
+                                Swal.fire({
+                                    title: 'error',
+                                    icon: 'Error',
+                                    text: 'Data gagal dihapus',
+                                    showConfirmButton: false,
+                                    timer: 1500,
+                                    timerProgressBar: true,
+                                })
                             }
-                        })
-                    }
-                });
-            }
+                        },
+                        error: function(error) {
+                            console.error(error);
+                            Swal.fire({
+                                title: 'Error',
+                                icon: 'error',
+                                text: 'Terjadi kesalahan saat menghapus data',
+                                showConfirmButton: false,
+                                timer: 1500,
+                                timerProgressBar: true,
+                            });
+                        }
+                    })
+                }
+            });
+        }
         var dataTable;
         $(document).ready(function() {
             var prefix = "<?= base_url() ?>";
@@ -625,7 +625,6 @@
                 });
             });
         });
-
         function fillModal(id, nama_obat, keluhan, dosis, jenis, factory) {
             document.getElementById('unama_obat').value = nama_obat;
             document.getElementById('ukeluhan').value = keluhan;
@@ -634,5 +633,67 @@
             document.getElementById('factory').value = factory;
             var formAction = "<?= base_url() ?>/uobat?id=" + id;
             document.getElementById('formEditPemakaian').action = formAction;
-        }
+        };
+        $('#btn-update').on('click', function(e) {
+            e.preventDefault();
+            var url = $('#formEditPemakaian').attr('action');
+            console.log(url);
+            var formData = new FormData($('#formEditPemakaian')[0]);
+            for (var pair of formData.entries()) {
+                console.log(pair[0] + ': ' + pair[1]);
+            }
+            Swal.fire({
+                title: 'Apakah Anda Yakin?',
+                text: 'Data ini akan dirubah!',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Ya, Ubah!!!',
+                cancelButtonText: 'Batal',
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        type: 'POST',
+                        url: url,
+                        data:formData,
+                        dataType: 'json',
+                        contentType: false,
+                        processData: false,
+                        success: function(response) {
+                            if (response.status == 200) {
+                                Swal.fire({
+                                    title: 'success',
+                                    icon: 'success',
+                                    text: 'Data berhasil di update',
+                                    showConfirmButton: false,
+                                    timer: 1500,
+                                    timerProgressBar: true,
+                                })
+                                dataTable.ajax.reload();
+                            } else {
+                                Swal.fire({
+                                    title: 'error',
+                                    icon: 'error',
+                                    text: 'Data gagal di update',
+                                    showConfirmButton: false,
+                                    timer: 1500,
+                                    timerProgressBar: true,
+                                })
+                            }
+                        },
+                        error: function(error) {
+                            console.error(error);
+                            Swal.fire({
+                                title: 'Error',
+                                icon: 'error',
+                                text: 'Terjadi kesalahan saat update data',
+                                showConfirmButton: false,
+                                timer: 1500,
+                                timerProgressBar: true,
+                            });
+                        }
+                    })
+                }
+            });
+        });
+
     </script>

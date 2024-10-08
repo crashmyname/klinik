@@ -94,7 +94,7 @@ $route->post('/data-user', function() use($userController, $request){
 });
 $route->post('/udata-user', function() use($userController, $request){
     AuthMiddleware::checkLogin();
-    $id = base64_decode($request->id);
+    $id = $request->id;
     $userController->updateUser($request, $id);
 });
 $route->post('/ddata-user', function() use($userController, $request){

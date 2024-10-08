@@ -207,6 +207,7 @@
                                                                 <input class="form-control" type="file"
                                                                     id="formFile" name="foto">
                                                                 <img src="<?= asset('user')?>/" width="25%" alt="" id="upfoto">
+                                                                <input type="hidden" name="oldfoto" id="">
                                                             </div>
                                                             <div class="col-sm-12 d-flex justify-content-end">
                                                                 <button type="submit"

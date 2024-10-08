@@ -19,7 +19,7 @@ class HwController
 
     public function hw()
     {
-        $title = "Data Hw";
+        $title = "Data HW";
         if(Request::isAjax()){
             $alat = HW::all();
             return DataTables::of($alat)->make(true);

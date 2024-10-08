@@ -19,11 +19,12 @@ class UserController
     }
     public function index(Request $request)
     {
+        $title = 'Data User';
         if(Request::isAjax()){
             $users = User::all();
             return DataTables::of($users)->make(true);
         }
-        View::render('user/user',[],'navbar/navbar');
+        View::render('user/user',['title'=>$title],'navbar/navbar');
     }
 
     public function addUser(Request $request)
@@ -54,13 +55,11 @@ class UserController
         $user = User::find($id);
         $user->nama_user = $request->nama_user;
         $user->username = $request->username;
-        if($request->password == ''){
-            $user->password;
-        } else {
+        if($request->password){
             $user->password = md5($request->password);
         }
         $user->level = $request->level;
-        if($user->foto){
+        if($request->getClientOriginalName('foto')){
             $path = storage_path('user');
             if(!file_exists($path)){
                 mkdir($path,0777,true);
@@ -74,7 +73,7 @@ class UserController
             $destination = $path . '/' . $user->foto;
             move_uploaded_file($tempPath,$destination);
         }
-        $user->updated_at = Date::now();
+        $user->updated_date = Date::now();
         $user->save();
         return Response::json(['status'=>200,'message'=>'success']);
     }

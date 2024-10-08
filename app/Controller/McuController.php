@@ -12,6 +12,7 @@ class McuController
 {
     // Controller logic here
     public function mcu(){
+        $title = 'Data MCU';
         if(Request::isAjax()){
             // $mcu = Mcu::all();
             $mcu = Mcu::query()
@@ -20,6 +21,6 @@ class McuController
             return DataTables::of($mcu)
                     ->make(true);
         }
-        View::render('mcu/mcu',[],'navbar/navbar');
+        View::render('mcu/mcu',['title'=>$title],'navbar/navbar');
     }
 }

@@ -80,7 +80,7 @@ class ObatController
         if($request->factory){
             $obat->factory = $request->factory;
         }
-        if($obat->foto){
+        if($request->getClientOriginalName('foto')){
             $path = storage_path('obat');
             if(!file_exists($path)){
                 mkdir($path,0777,true);
@@ -95,7 +95,7 @@ class ObatController
             move_uploaded_file($tempPath,$destination);
         }
         $obat->save();
-        return View::redirectTo('/obat');
+        return Response::json(['status'=>200]);
     }
 
     public function deleteObat($id)

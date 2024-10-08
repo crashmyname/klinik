@@ -26,6 +26,7 @@ class HomeController
 
     public function index()
     {
+        $title = 'Dashboard';
         $obat = Obat::query()->count();
         $user = User::query()->count();
         $pemakaian = Pemakaian::query()
@@ -38,7 +39,7 @@ class HomeController
                     ->count();
         $mcu = Mcu::query()->count();
         $alat = Alat::query()->count();
-        View::render('dashboard',['obat'=>$obat,'user'=>$user,'pemakaian'=>$pemakaian,'rest'=>$rest,'mcu'=>$mcu,'alat'=>$alat],'navbar/navbar');
+        View::render('dashboard',['obat'=>$obat,'user'=>$user,'pemakaian'=>$pemakaian,'rest'=>$rest,'mcu'=>$mcu,'alat'=>$alat,'title'=>$title],'navbar/navbar');
     }
 
     public function onLogin(Request $request)

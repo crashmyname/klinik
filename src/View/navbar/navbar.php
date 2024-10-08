@@ -101,25 +101,25 @@
                 <div class="sidebar-menu">
                     <ul class="menu">
                         <li class="sidebar-title">Menu</li>
-                        <li class="sidebar-item ">
+                        <li class="sidebar-item <?= $title == 'Dashboard' ? 'active' : ''?>">
                             <a href="<?=base_url()?>/home" class='sidebar-link'>
                                 <i class="bi bi-grid-fill"></i>
                                 <span>Dashboard</span>
                             </a>
                         </li>
-                        <li class="sidebar-item has-sub">
+                        <li class="sidebar-item has-sub <?= $title == 'Data Obat' || $title == 'Data Alat' || $title == 'Data OS' || $title == 'Data User' ? 'active' : '' ?>">
                             <a href="#" class='sidebar-link'>
                                 <i class="bi bi-folder-fill"></i>
                                 <span>Master Data</span>
                             </a>
-                            <ul class="submenu">
+                            <ul class="submenu <?= $title == 'Data Obat' || $title == 'Data Alat' || $title == 'Data OS' || $title == 'Data User' ? 'active' : '' ?>">
                                 <li class="submenu-item <?= $title == 'Data Obat' ? 'active' : '' ?>">
                                     <a href="<?=base_url()?>/obat" class='submenu-link'>
                                         <i class="bi bi-capsule"></i>
                                         <span>Data Obat</span>
                                     </a>
                                 </li>
-                                <li class="submenu-item ">
+                                <li class="submenu-item <?= $title == 'Data Alat' ? 'active' : '' ?>">
                                     <a href="<?= 'data-alat' ?>" class='submenu-link'>
                                         <i class="bi bi-gear-wide-connected"></i>
                                         <span>Data Alat</span>
@@ -131,7 +131,7 @@
                                         <span>Data OS</span>
                                     </a>
                                 </li>
-                                <li class="submenu-item ">
+                                <li class="submenu-item <?= $title == 'Data User' ? 'active' : '' ?>">
                                     <a href="<?= 'data-user' ?>" class='submenu-link'>
                                         <i class="bi bi-person-plus-fill"></i>
                                         <span>Data User</span>
@@ -139,8 +139,8 @@
                                 </li>
                             </ul>
                         </li>
-                        <li class="sidebar-item ">
-                            <a href="<?= 'data-hw' ?>" class='sidebar-link'>
+                        <li class="sidebar-item <?= $title == 'Data HW' ? 'active' : ''?>">
+                            <a href="<?= base_url()?>/data-hw" class='sidebar-link'>
                                 <i class="bi bi-person-heart"></i>
                                 <span>Data Pengambilan HW</span>
                             </a>
@@ -165,7 +165,7 @@
                                 </li>
                             </ul>
                         </li> -->
-                        <li class="sidebar-item ">
+                        <li class="sidebar-item <?= $title == 'Data Pemakaian Obat' ? 'active' : ''?>">
                             <a href="<?= base_url() ?>/pemakaian-obat" class='sidebar-link'>
                                 <i class="bi bi-file-earmark-medical"></i>
                                 <span>Data Permintaan Obat</span>
@@ -189,7 +189,7 @@
                                 <span>Karyawan Istirahat</span>
                             </a>
                         </li>
-                        <li class="sidebar-item ">
+                        <li class="sidebar-item <?= $title == 'Data MCU' ? 'active' : ''?>">
                             <a href="<?= 'data-mcu' ?>" class='sidebar-link'>
                                 <i class="bi bi-files"></i>
                                 <span>Data MCU</span>
