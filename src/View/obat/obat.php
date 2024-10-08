@@ -637,11 +637,6 @@
         $('#btn-update').on('click', function(e) {
             e.preventDefault();
             var url = $('#formEditPemakaian').attr('action');
-            console.log(url);
-            var formData = new FormData($('#formEditPemakaian')[0]);
-            for (var pair of formData.entries()) {
-                console.log(pair[0] + ': ' + pair[1]);
-            }
             Swal.fire({
                 title: 'Apakah Anda Yakin?',
                 text: 'Data ini akan dirubah!',
@@ -651,6 +646,7 @@
                 cancelButtonText: 'Batal',
             }).then((result) => {
                 if (result.isConfirmed) {
+                    var formData = new FormData($('#formEditPemakaian')[0]);
                     $.ajax({
                         type: 'POST',
                         url: url,

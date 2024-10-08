@@ -157,7 +157,7 @@
                     <div class="card-body py-4 px-4">
                         <div class="d-flex align-items-center">
                             <div class="avatar avatar-xl">
-                                <img src="<?= asset('GBZsLvrWsAAwtIw.png') ?>" alt="Face 1">
+                                <img src="<?= asset('user').'/'.\Support\Session::user()->foto ?>" alt="Face 1">
                             </div>
                             <div class="ms-3 name">
                                 <h5 class="font-bold" style="text-transform:uppercase;">

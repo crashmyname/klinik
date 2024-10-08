@@ -1,4 +1,5 @@
 <?php
+use App\Controller\ApiController;
 session_start();
 use Support\Request;
 use Support\Route;
@@ -28,8 +29,14 @@ $alatController = new AlatController();
 $hwController = new HwController();
 $mcuController = new McuController();
 $stockController = new StockController();
+$api = new ApiController();
 
 handleMiddleware();
+
+// TEST
+$route->get('/test', function() use($api,$request){
+    $api->DataApiNama($request);
+});
 
 // Authentication
 $route->get('/', function(){
