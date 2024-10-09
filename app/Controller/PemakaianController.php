@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Controller;
+use App\Model\Over;
 use App\Model\Pemakaian;
 use App\Model\Stock;
 use Support\DataTables;
@@ -56,7 +57,7 @@ class PemakaianController
                         ->first();
         switch (true) {
             case $pemakaian > 1 && ($request->jns_obat == '36' || $request->jns_obat == '93'):
-                $over = Over::create([
+                Over::create([
                     'nik' => $request->nik,
                     'nama' => $request->nama,
                     'kode_section' => $request->kode_section,
@@ -83,7 +84,7 @@ class PemakaianController
                 Response::json(['status'=>205]);
                 break;
             default:
-                $addpemakaian = Pemakaian::create([
+                Pemakaian::create([
                     'nik' => $request->nik,
                     'nama' => $request->nama,
                     'kode_section' => $request->kode_section,
@@ -98,7 +99,35 @@ class PemakaianController
                     $stock->stock = $stock->stock - $request->jumlah;
                     $stock->save();
                 }
+                Response::json(['status'=>200]);
                 break;
+        }
+    }
+
+    public function updatePemakaian(Request $request, $id)
+    {
+        $pemakaian = Pemakaian::find($id);
+    }
+
+    public function deletePemakaian(Request $request, $id)
+    {
+        $this->beginTransaction();
+
+        try{
+            $pemakaian = Pemakaian::find($id);
+            $pemakaian->deleted_at = Date::now();
+            $pemakaian->deleted_by = Session::user()->username;
+            $stock = Stock::query()
+                            ->where('id_obat','=',$pemakaian->jenis_obat)
+                            ->first();
+            $stock->stock += $pemakaian->jumlah;
+            $stock->save();    
+            $pemakaian->save();
+            $this->commit();
+            return Response::json(['status'=>200]);
+        } catch (\Exception $e) {
+            $this->rollback();
+            return Response::json(['status' => 500, 'message' => $e->getMessage()]);
         }
     }
 }
