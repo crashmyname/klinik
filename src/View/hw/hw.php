@@ -673,13 +673,10 @@
                                 select.each(function(data) {
                                     const idHW = data.id_hw;
                                     $.ajax({
-                                        type: 'DELETE',
-                                        url: "" + '/' + idHW,
-                                        data: {
-                                            _token: ''
-                                        },
+                                        type: 'POST',
+                                        url: "<?= base_url()?>" + '/delete-hw?id=' + idHW,
                                         success: function(response) {
-                                            if (response.status === 'success') {
+                                            if (response.status === 200) {
                                                 // Swal.fire({
                                                 //     title: 'Success',
                                                 //     icon: 'success',
@@ -734,15 +731,11 @@
                         if (result.isConfirmed) {
                             $.ajax({
                                 type: 'POST',
-                                url: '',
+                                url: '<?= base_url()?>/add-hw',
                                 data: $('#add_hw').serialize(),
                                 dataType: 'json',
                                 success: function(response) {
-                                    console.log(response);
-                                    console.log('CSRF Token:', $('meta[name="csrf-token"]')
-                                        .attr(
-                                            'content'));
-                                    if (response.status === 'success') {
+                                    if (response.status === 200) {
                                         Swal.fire({
                                             icon: 'success',
                                             title: 'Success',
@@ -779,15 +772,11 @@
                         if (result.isConfirmed) {
                             $.ajax({
                                 type: 'POST',
-                                url: '',
+                                url: '<?= base_url()?>/add-hw',
                                 data: $('#add_hwm').serialize(),
                                 dataType: 'json',
                                 success: function(response) {
-                                    console.log(response);
-                                    console.log('CSRF Token:', $('meta[name="csrf-token"]')
-                                        .attr(
-                                            'content'));
-                                    if (response.status === 'success') {
+                                    if (response.status === 200) {
                                         Swal.fire({
                                             icon: 'success',
                                             title: 'Success',

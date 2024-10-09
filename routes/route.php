@@ -118,10 +118,19 @@ $route->get('/data-hw', function() use ($hwController){
     AuthMiddleware::checkLogin();
     $hwController->hw();
 });
+$route->post('/add-hw', function() use($hwController, $request){
+    AuthMiddleware::checkLogin();
+    $hwController->AddHw($request);
+});
 $route->post('/edit-hw', function() use($hwController, $request){
     AuthMiddleware::checkLogin();
     $id = $request->id;
     $hwController->UpdateHw($request,$id);
+});
+$route->post('/delete-hw', function() use($hwController, $request){
+    AuthMiddleware::checkLogin();
+    $id = $request->id;
+    $hwController->deleteHw($request,$id);
 });
 $route->get('/data-mcu', function() use ($mcuController){
     AuthMiddleware::checkLogin();

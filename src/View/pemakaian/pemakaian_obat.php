@@ -613,20 +613,16 @@
             });
             $('#simpanp').on('click', function(e) {
                 e.preventDefault();
-                var url = "{{ route('addpemakaian') }}";
+                var url = "";
                 var formData = new FormData($('#formpemakaian')[0]);
                 $.ajax({
                     type: 'POST',
                     url: url,
                     processData: false, // Jangan memproses data
                     contentType: false,
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    },
                     data: formData,
                     dataType: 'json',
                     success: function(response) {
-                        console.log(response);
                         if (response.status === 200) {
                             Swal.fire({
                                 title: 'Success',
@@ -656,6 +652,13 @@
                                 title: 'Error',
                                 icon: 'error',
                                 text: 'Stock Obat sudah habis',
+                            });
+                            
+                        } else if (response.status === 205) {
+                            Swal.fire({
+                                title: 'Error',
+                                icon: 'error',
+                                text: 'Jumlah yang diinput melebihi stock',
                             });
                         } else {
                             Swal.fire({

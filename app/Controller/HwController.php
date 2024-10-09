@@ -40,7 +40,15 @@ class HwController
 
     public function AddHw(Request $request)
     {
-
+        $hw = HW::create([
+            'nik' => $request->nik,
+            'nama' => $request->nama,
+            'section' => $request->section,
+            'tanggal' => $request->tanggal,
+            'created_by' => Session::user()->username,
+            'created_at' => Date::now()
+        ]);
+        return Response::json(['status' => 200]);
     }
 
     public function UpdateHw(Request $request, $id)
@@ -58,7 +66,9 @@ class HwController
 
     public function deleteHw(Request $request, $id)
     {
-
+        $hw = HW::find($id);
+        $hw->delete();
+        return Response::json(['status'=>200]);
     }
 
 }
