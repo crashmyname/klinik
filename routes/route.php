@@ -34,8 +34,11 @@ $api = new ApiController();
 handleMiddleware();
 
 // TEST
-$route->get('/test', function() use($api,$request){
+$route->post('/test', function() use($api,$request){
     $api->DataApiNama($request);
+});
+$route->post('/test2', function() use($api,$request){
+    $api->DataApiSect($request);
 });
 
 // Authentication
@@ -109,9 +112,16 @@ $route->post('/ddata-user', function() use($userController, $request){
     $id = base64_decode($request->id);
     $userController->deleteUser($id);
 });
+
+// HW
 $route->get('/data-hw', function() use ($hwController){
     AuthMiddleware::checkLogin();
     $hwController->hw();
+});
+$route->post('/edit-hw', function() use($hwController, $request){
+    AuthMiddleware::checkLogin();
+    $id = $request->id;
+    $hwController->UpdateHw($request,$id);
 });
 $route->get('/data-mcu', function() use ($mcuController){
     AuthMiddleware::checkLogin();

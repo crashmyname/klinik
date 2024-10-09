@@ -75,11 +75,15 @@
                                                                     <label>NIK</label>
                                                                 </div>
                                                                 <div class="col-md-8 form-group">
-                                                                    <input list="datalist" name="nik" id="emp"
+                                                                    <input list="datalist" name="nik" id="nik"
                                                                         class="form-control">
                                                                     <datalist id="datalist">
-                                                                        <option value=""> - </option>
-                                                                        
+                                                                        <option value="" disabled selected hidden> - </option>
+                                                                        <?php foreach($res as $emp): ?>
+                                                                            <?php foreach($emp as $data=>$value): ?>
+                                                                                <option value="<?= $value['nik']?>"><?= $value['nama']?></option>
+                                                                            <?php endforeach; ?>
+                                                                        <?php endforeach; ?>
                                                                     </datalist>
                                                                 </div>
                                                                 <div class="col-md-4">
@@ -319,7 +323,7 @@
                                                                     <label>NIK</label>
                                                                 </div>
                                                                 <div class="col-md-8 form-group">
-                                                                    <input type="text" id="nik"
+                                                                    <input type="text" id="unik"
                                                                         class="form-control" name="nik"
                                                                         value="">
                                                                 </div>
@@ -545,7 +549,7 @@
                         selected: true
                     }).data();
                     var modalHW = $('#selectedData');
-                    var nik = $('#nik');
+                    var nik = $('#unik');
                     var nama = $('#namahw');
                     var section = $('#sectionhw');
                     var tanggal = $('#tanggalhw');
@@ -582,7 +586,7 @@
                     }
                     var row = select[0];
                     var idHW = row.id_hw;
-                    var editPemakaianHW = "" + '/' + idHW;
+                    var editPemakaianHW = "<?= base_url()?>" + '/edit-hw?id=' + idHW;
                     var formID = '#formuphw';
                     console.log(idHW);
                     Swal.fire({
@@ -602,12 +606,7 @@
                                 processData: false,
                                 dataType: 'json',
                                 success: function(response) {
-                                    console.log(response);
-                                    console.log('CSRF Token:', $(
-                                            'meta[name="csrf-token"]')
-                                        .attr(
-                                            'content'));
-                                    if (response.status === 'success') {
+                                    if (response.status === 200) {
                                         Swal.fire({
                                             title: 'success',
                                             icon: 'success',
@@ -620,7 +619,7 @@
                                     } else {
                                         Swal.fire({
                                             title: 'error',
-                                            icon: 'Error',
+                                            icon: 'error',
                                             text: 'Data gagal diupdate',
                                             showConfirmButton: false,
                                             timer: 1500,
@@ -882,17 +881,16 @@
                 });
             });
 
-            $("#emp").change(function() {
-                var emp = $("#emp").val();
-                var csrfToken = $('meta[name="csrf-token"]').attr('content');
+            $("#nik").change(function() {
+                var nik = $("#nik").val();
+                // var csrfToken = $('meta[name="csrf-token"]').attr('content');
                 // Menggunakan ajax untuk mengirim dan dan menerima data dari server
                 $.ajax({
                     type: "POST",
                     dataType: "json",
-                    url: "",
+                    url: "<?= base_url()?>/test",
                     data: {
-                        _token: csrfToken,
-                        emp: emp,
+                        nik: nik,
                     },
                     success: function(data) {
                         var options = '';
@@ -904,23 +902,21 @@
                 });
             });
 
-            $("#emp").change(function() {
-                var sect = $("#emp").val();
-                var csrfToken = $('meta[name="csrf-token"]').attr('content');
+            $("#nik").change(function() {
+                var nik = $("#nik").val();
+                // var csrfToken = $('meta[name="csrf-token"]').attr('content');
                 // Menggunakan ajax untuk mengirim dan dan menerima data dari server
                 $.ajax({
                     type: "POST",
                     dataType: "json",
-                    url: "",
+                    url: "<?= base_url()?>/test2",
                     data: {
-                        _token: csrfToken,
-                        emp: sect,
+                        nik: nik,
                     },
                     success: function(data) {
                         var options = '';
                         data.forEach(function(m) {
-                            options += "<option value='" + m.kode_section + "'>" + m.kode_section +
-                                "</option>";
+                            options += "<option value='" + m.kode_section + "'>" + m.kode_section + "</option>";
                         });
                         $("#section").html(options);
                     }
