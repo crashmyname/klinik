@@ -6,6 +6,7 @@ use App\Model\Pemakaian;
 use App\Model\Stock;
 use Support\DataTables;
 use Support\Date;
+use Support\Http;
 use Support\Request;
 use Support\Response;
 use Support\Session;
@@ -39,8 +40,10 @@ class PemakaianController
             
             return DataTables::of($pemakaian)->make(true);
         }
+        $api = Http::get('http://10.203.68.47:90/fambook/config/newapi.php?action=getSimpleEmp&api_key=P@55W0RD');
+        $res = json_encode($api);
         $count = Pemakaian::query()->count();
-        View::render('pemakaian/pemakaian_obat',['title'=>$title,'count'=>$count],'navbar/navbar');
+        View::render('pemakaian/pemakaian_obat',['title'=>$title,'count'=>$count,'res'=>$res],'navbar/navbar');
     }
 
     public function addPemakaian(Request $request)
