@@ -120,6 +120,15 @@ class PemakaianController
         $pemakaian = Pemakaian::find($id);
         $pemakaian->nik = $request->nik;
         $pemakaian->nama = $request->nama;
+        $pemakaian->kode_section = $request->kode_section;
+        $pemakaian->keluhan = $request->keluhan;
+        $pemakaian->jenis_obat = $request->jenis_obat;
+        $pemakaian->jumlah = $request->jumlah;
+        $pemakaian->tgl_pemakaian = $request->tgl_pemakaian;
+        $pemakaian->modify_by = Session::user()->username;
+        $pemakaian->deleted_at = Date::Now();
+        $pemakaian->save();
+        return Response::json(['status'=>200]);
     }
 
     public function deletePemakaian(Request $request, $id)
