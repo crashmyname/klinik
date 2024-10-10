@@ -33,11 +33,11 @@ $api = new ApiController();
 
 handleMiddleware();
 
-// TEST
-$route->post('/test', function() use($api,$request){
+// API
+$route->post('/apiemp', function() use($api,$request){
     $api->DataApiNama($request);
 });
-$route->post('/test2', function() use($api,$request){
+$route->post('/apisect', function() use($api,$request){
     $api->DataApiSect($request);
 });
 
@@ -84,10 +84,18 @@ $route->post('/dobat', function() use ($obatController, $request){
     $id = base64_decode($request->id);
     $obatController->deleteObat($id);
 });
+
+// PEMAKAIAN OBAT
 $route->get('/pemakaian-obat', function() use ($pemakaianController){
     AuthMiddleware::checkLogin();
     $pemakaianController->pemakaian();
 });
+$route->post('/pemakaian-obat', function() use($pemakaianController, $request){
+    AuthMiddleware::checkLogin();
+    $pemakaianController->addPemakaian($request);
+});
+
+// ALAT
 $route->get('/data-alat', function() use ($alatController){
     AuthMiddleware::checkLogin();
     $alatController->alat();

@@ -872,12 +872,10 @@
 
             $("#nik").change(function() {
                 var nik = $("#nik").val();
-                // var csrfToken = $('meta[name="csrf-token"]').attr('content');
-                // Menggunakan ajax untuk mengirim dan dan menerima data dari server
                 $.ajax({
                     type: "POST",
                     dataType: "json",
-                    url: "<?= base_url()?>/test",
+                    url: "<?= base_url()?>/apiemp",
                     data: {
                         nik: nik,
                     },
@@ -893,12 +891,10 @@
 
             $("#nik").change(function() {
                 var nik = $("#nik").val();
-                // var csrfToken = $('meta[name="csrf-token"]').attr('content');
-                // Menggunakan ajax untuk mengirim dan dan menerima data dari server
                 $.ajax({
                     type: "POST",
                     dataType: "json",
-                    url: "<?= base_url()?>/test2",
+                    url: "<?= base_url()?>/apisect",
                     data: {
                         nik: nik,
                     },

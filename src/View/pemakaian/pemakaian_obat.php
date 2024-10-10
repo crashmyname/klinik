@@ -38,20 +38,23 @@
                                         </div>
                                         <div class="card-content">
                                             <div class="card-body">
-                                                <form action="" class="form form-horizontal" id="formpemakaian"
+                                                <form action="<?= base_url()?>/pemakaian-obat" class="form form-horizontal" id="formpemakaian"
                                                     method="post" enctype="multipart/form-data">
-                                                    @csrf
                                                     <div class="form-body">
                                                         <div class="row">
                                                             <div class="col-md-4">
                                                                 <label>NIK</label>
                                                             </div>
                                                             <div class="col-md-8 form-group">
-                                                                <input list="datalist" id="emp" name="emp"
+                                                                <input list="datalist" id="nik" name="nik"
                                                                     class="form-control">
                                                                 <datalist id="datalist">
-                                                                    <option value=""> - </option>
-                                                                    
+                                                                    <option value="" disabled selected hidden> - </option>
+                                                                    <?php foreach($res as $data): ?>
+                                                                        <?php foreach($data as $result=>$value): ?>
+                                                                        <option value="<?= $value['nik']?>"><?= $value['nik']?> <?= $value['nama']?></option>
+                                                                        <?php endforeach; ?>
+                                                                    <?php endforeach; ?>
                                                                 </datalist>
                                                             </div>
                                                             <div class="col-md-4">
@@ -87,8 +90,10 @@
                                                             <div class="col-md-8 form-group">
                                                                 <select type="text" name="jns_obat" id="jns_obat"
                                                                     class="form-control" required>
-                                                                    <option value=""> - </option>
-                                                                    
+                                                                    <option value="" disabled selected hidden> - </option>
+                                                                    <?php foreach($obat as $data): ?>
+                                                                        <option value="<?= $data['id_obat']?>"><?= $data['nama_obat']?> | FACT <?= $data['factory']?></option>
+                                                                    <?php endforeach;?>
                                                                 </select>
                                                             </div>
                                                             <div class="col-md-4">
@@ -167,8 +172,8 @@
                                                                 <label>NIK</label>
                                                             </div>
                                                             <div class="col-md-8 form-group">
-                                                                <input type="text" id="empm"
-                                                                    class="form-control" name="emp"
+                                                                <input type="text" id="nikm"
+                                                                    class="form-control" name="nik"
                                                                     placeholder="Masukan NIK">
                                                             </div>
                                                             <div class="col-md-4">
@@ -374,8 +379,8 @@
                                                                 <label>NIK</label>
                                                             </div>
                                                             <div class="col-md-8 form-group">
-                                                                <input type="text" id="empm"
-                                                                    class="form-control" name="emp"
+                                                                <input type="text" id="unik"
+                                                                    class="form-control" name="nik"
                                                                     placeholder="Masukan NIK">
                                                             </div>
                                                             <div class="col-md-4">
@@ -611,73 +616,73 @@
                     }
                 ]
             });
-            $('#simpanp').on('click', function(e) {
-                e.preventDefault();
-                var url = "";
-                var formData = new FormData($('#formpemakaian')[0]);
-                $.ajax({
-                    type: 'POST',
-                    url: url,
-                    processData: false, // Jangan memproses data
-                    contentType: false,
-                    data: formData,
-                    dataType: 'json',
-                    success: function(response) {
-                        if (response.status === 200) {
-                            Swal.fire({
-                                title: 'Success',
-                                icon: 'success',
-                                text: 'Data berhasil ditambah',
-                                timerProgressBar: true,
-                                timer: 1500,
-                            }).then(function() {
-                                $('#formaddresin')[0].reset();
-                                reloadData();
-                            });
-                            $('#ics').focus();
-                        } else if (response.status === 202) {
-                            Swal.fire({
-                                title: 'Error',
-                                icon: 'error',
-                                text: 'Karyawan sudah mengambil PAINKILLA lebih dari 2',
-                            });
-                        } else if (response.status === 203) {
-                            Swal.fire({
-                                title: 'Error',
-                                icon: 'error',
-                                text: 'Karyawan mengambil PAINKILLA lebih dari 1',
-                            });
-                        } else if (response.status === 204) {
-                            Swal.fire({
-                                title: 'Error',
-                                icon: 'error',
-                                text: 'Stock Obat sudah habis',
-                            });
+            // $('#simpanp').on('click', function(e) {
+            //     e.preventDefault();
+            //     var url = "<?= base_url()?>/pemakaian-obat";
+            //     var formData = new FormData($('#formpemakaian')[0]);
+            //     $.ajax({
+            //         type: 'POST',
+            //         url: url,
+            //         processData: false, // Jangan memproses data
+            //         contentType: false,
+            //         data: formData,
+            //         dataType: 'json',
+            //         success: function(response) {
+            //             if (response.status === 200) {
+            //                 Swal.fire({
+            //                     title: 'Success',
+            //                     icon: 'success',
+            //                     text: 'Data berhasil ditambah',
+            //                     timerProgressBar: true,
+            //                     timer: 1500,
+            //                 }).then(function() {
+            //                     $('#formaddresin')[0].reset();
+            //                     reloadData();
+            //                 });
+            //                 $('#ics').focus();
+            //             } else if (response.status === 202) {
+            //                 Swal.fire({
+            //                     title: 'Error',
+            //                     icon: 'error',
+            //                     text: 'Karyawan sudah mengambil PAINKILLA lebih dari 2',
+            //                 });
+            //             } else if (response.status === 203) {
+            //                 Swal.fire({
+            //                     title: 'Error',
+            //                     icon: 'error',
+            //                     text: 'Karyawan mengambil PAINKILLA lebih dari 1',
+            //                 });
+            //             } else if (response.status === 204) {
+            //                 Swal.fire({
+            //                     title: 'Error',
+            //                     icon: 'error',
+            //                     text: 'Stock Obat sudah habis',
+            //                 });
                             
-                        } else if (response.status === 205) {
-                            Swal.fire({
-                                title: 'Error',
-                                icon: 'error',
-                                text: 'Jumlah yang diinput melebihi stock',
-                            });
-                        } else {
-                            Swal.fire({
-                                title: 'Error',
-                                icon: 'error',
-                                text: 'Gagal membuat data | Data yang diinput melebihi stock',
-                            })
-                        }
-                    },
-                    error: function(error) {
-                        console.error(error);
-                        Swal.fire({
-                            title: 'Error',
-                            icon: 'error',
-                            text: 'Error dalam melakukan fungsi',
-                        })
-                    }
-                })
-            })
+            //             } else if (response.status === 205) {
+            //                 Swal.fire({
+            //                     title: 'Error',
+            //                     icon: 'error',
+            //                     text: 'Jumlah yang diinput melebihi stock',
+            //                 });
+            //             } else {
+            //                 Swal.fire({
+            //                     title: 'Error',
+            //                     icon: 'error',
+            //                     text: 'Gagal membuat data | Data yang diinput melebihi stock',
+            //                 })
+            //             }
+            //         },
+            //         error: function(error) {
+            //             console.error(error);
+            //             Swal.fire({
+            //                 title: 'Error',
+            //                 icon: 'error',
+            //                 text: 'Error dalam melakukan fungsi',
+            //             })
+            //         }
+            //     })
+            // })
             $('#simpanpm').on('click', function(e) {
                 e.preventDefault();
                 var url = "";
@@ -800,17 +805,14 @@
             });
         });
 
-        $("#emp").change(function() {
-            var emp = $("#emp").val();
-            var csrfToken = $('meta[name="csrf-token"]').attr('content');
-            // Menggunakan ajax untuk mengirim dan dan menerima data dari server
+        $("#nik").change(function() {
+            var nik = $("#nik").val();
             $.ajax({
                 type: "POST",
                 dataType: "json",
-                url: "{{ route('DataApi') }}",
+                url: "<?= base_url()?>/apiemp",
                 data: {
-                    _token: csrfToken,
-                    emp: emp,
+                    nik: nik,
                 },
                 success: function(data) {
                     var options = '';
@@ -822,17 +824,14 @@
             });
         });
 
-        $("#emp").change(function() {
-            var sect = $("#emp").val();
-            var csrfToken = $('meta[name="csrf-token"]').attr('content');
-            // Menggunakan ajax untuk mengirim dan dan menerima data dari server
+        $("#nik").change(function() {
+            var sect = $("#nik").val();
             $.ajax({
                 type: "POST",
                 dataType: "json",
-                url: "{{ route('DataApiSection') }}",
+                url: "<?= base_url()?>/apisect",
                 data: {
-                    _token: csrfToken,
-                    emp: sect,
+                    nik: sect,
                 },
                 success: function(data) {
                     var options = '';

@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Controller;
+use App\Model\Obat;
 use App\Model\Over;
 use App\Model\Pemakaian;
 use App\Model\Stock;
@@ -23,10 +24,10 @@ class PemakaianController
         $this->validator = new Validator();
     }
 
-    public function index()
-    {
-        View::render('dashboard',[],'navbar/navbar');
-    }
+    // public function index()
+    // {
+    //     View::render('dashboard',[],'navbar/navbar');
+    // }
 
     public function pemakaian()
     {
@@ -42,28 +43,33 @@ class PemakaianController
         }
         $api = Http::get('http://10.203.68.47:90/fambook/config/newapi.php?action=getSimpleEmp&api_key=P@55W0RD');
         $res = json_encode($api);
+        if($api['status'] == 200){
+            $res = $api['response'];
+        } else {
+            $res = [];
+        }
         $count = Pemakaian::query()->count();
-        View::render('pemakaian/pemakaian_obat',['title'=>$title,'count'=>$count,'res'=>$res],'navbar/navbar');
+        $obat = Obat::query()->select('id_obat','nama_obat','factory')->get();
+        View::render('pemakaian/pemakaian_obat',['title'=>$title,'count'=>$count,'res'=>$res,'obat'=>$obat],'navbar/navbar');
     }
 
     public function addPemakaian(Request $request)
     {
-        $month = Date::parse($request->tanggal)->format('m');
+        $month = Date::parse($request->tgl_pemakaian)->format('m');
         $pemakaian = Pemakaian::query()
                                 ->where('nik','=',$request->nik)
                                 ->whereMonth('tgl_pemakaian',$month)
-                                ->where('jenis_obat','=','36')
-                                ->where('jenis_obat','=','93')
+                                ->whereIn('jenis_obat',['36','93'])
                                 ->get();
         $stock = Stock::query()
-                        ->where('id_obat','=',$request->jenis_obat)
+                        ->where('id_obat','=',$request->jns_obat)
                         ->first();
         switch (true) {
-            case $pemakaian > 1 && ($request->jns_obat == '36' || $request->jns_obat == '93'):
+            case count($pemakaian) > 1 && ($request->jns_obat == '36' || $request->jns_obat == '93'):
                 Over::create([
                     'nik' => $request->nik,
                     'nama' => $request->nama,
-                    'kode_section' => $request->kode_section,
+                    'kode_section' => $request->section,
                     'keluhan' => $request->keluhan,
                     'jenis_obat' => $request->jns_obat,
                     'jumlah' => $request->jumlah,
@@ -75,22 +81,22 @@ class PemakaianController
                     $stock->stock = $stock->stock - $request->jumlah;
                     $stock->save();
                 }
-                Response::json(['status' => 202]);
+                return Response::json(['status' => 202]);
                 break;
-            case ($request->jns_obat=='36' || $request->jns_obat=='93') && $request->jumlah > 1:
-                Response::json(['status'=>203]);
+            case ($request->jns_obat=='36' || $request->jns_obat=='93') && $request->jumlah > 2:
+                return Response::json(['status'=>203]);
                 break;
-            case $stock->stock == 0:
-                Response::json(['status'=>204]);
+            case $stock->stock == '0':
+                return Response::json(['status'=>204]);
                 break;
             case $request->jumlah > $stock->stock:
-                Response::json(['status'=>205]);
+                return Response::json(['status'=>205]);
                 break;
             default:
                 Pemakaian::create([
                     'nik' => $request->nik,
                     'nama' => $request->nama,
-                    'kode_section' => $request->kode_section,
+                    'kode_section' => $request->section,
                     'keluhan' => $request->keluhan,
                     'jenis_obat' => $request->jns_obat,
                     'jumlah' => $request->jumlah,
@@ -99,10 +105,10 @@ class PemakaianController
                     'created_at' => Date::now()
                 ]);
                 if($stock){
-                    $stock->stock = $stock->stock - $request->jumlah;
+                    $stock->stock -= $request->jumlah;
                     $stock->save();
                 }
-                Response::json(['status'=>200]);
+                return Response::json(['status'=>200]);
                 break;
         }
     }
@@ -110,6 +116,8 @@ class PemakaianController
     public function updatePemakaian(Request $request, $id)
     {
         $pemakaian = Pemakaian::find($id);
+        $pemakaian->nik = $request->nik;
+        $pemakaian->nama = $request->nama;
     }
 
     public function deletePemakaian(Request $request, $id)
