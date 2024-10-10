@@ -64,52 +64,54 @@ class PemakaianController
         $stock = Stock::query()
                         ->where('id_obat','=',$request->jns_obat)
                         ->first();
-        switch (true) {
-            case count($pemakaian) > 1 && ($request->jns_obat == '36' || $request->jns_obat == '93'):
-                Over::create([
-                    'nik' => $request->nik,
-                    'nama' => $request->nama,
-                    'kode_section' => $request->section,
-                    'keluhan' => $request->keluhan,
-                    'jenis_obat' => $request->jns_obat,
-                    'jumlah' => $request->jumlah,
-                    'tgl_pemakaian' => $request->tgl_pemakaian,
-                    'created_by' => Session::user()->username,
-                    'created_at' => Date::now()
-                ]);
-                if($stock){
-                    $stock->stock = $stock->stock - $request->jumlah;
-                    $stock->save();
-                }
-                return Response::json(['status' => 202]);
-                break;
-            case ($request->jns_obat=='36' || $request->jns_obat=='93') && $request->jumlah > 2:
-                return Response::json(['status'=>203]);
-                break;
-            case $stock->stock == '0':
-                return Response::json(['status'=>204]);
-                break;
-            case $request->jumlah > $stock->stock:
-                return Response::json(['status'=>205]);
-                break;
-            default:
-                Pemakaian::create([
-                    'nik' => $request->nik,
-                    'nama' => $request->nama,
-                    'kode_section' => $request->section,
-                    'keluhan' => $request->keluhan,
-                    'jenis_obat' => $request->jns_obat,
-                    'jumlah' => $request->jumlah,
-                    'tgl_pemakaian' => $request->tgl_pemakaian,
-                    'created_by' => Session::user()->username,
-                    'created_at' => Date::now()
-                ]);
-                if($stock){
-                    $stock->stock -= $request->jumlah;
-                    $stock->save();
-                }
-                return Response::json(['status'=>200]);
-                break;
+        if(($request->jns_obat=='36' || $request->jns_obat=='93') && $request->jumlah > 2){
+            return Response::json(['status'=>203]);
+        } else {
+
+            switch (true) {
+                case count($pemakaian) > 1 && ($request->jns_obat == '36' || $request->jns_obat == '93'):
+                    Over::create([
+                        'nik' => $request->nik,
+                        'nama' => $request->nama,
+                        'kode_section' => $request->section,
+                        'keluhan' => $request->keluhan,
+                        'jenis_obat' => $request->jns_obat,
+                        'jumlah' => $request->jumlah,
+                        'tgl_pemakaian' => $request->tgl_pemakaian,
+                        'created_by' => Session::user()->username,
+                        'created_at' => Date::now()
+                    ]);
+                    if($stock){
+                        $stock->stock = $stock->stock - $request->jumlah;
+                        $stock->save();
+                    }
+                    return Response::json(['status' => 202]);
+                    break;
+                case $stock->stock == '0':
+                    return Response::json(['status'=>204]);
+                    break;
+                case $request->jumlah > $stock->stock:
+                    return Response::json(['status'=>205]);
+                    break;
+                default:
+                    Pemakaian::create([
+                        'nik' => $request->nik,
+                        'nama' => $request->nama,
+                        'kode_section' => $request->section,
+                        'keluhan' => $request->keluhan,
+                        'jenis_obat' => $request->jns_obat,
+                        'jumlah' => $request->jumlah,
+                        'tgl_pemakaian' => $request->tgl_pemakaian,
+                        'created_by' => Session::user()->username,
+                        'created_at' => Date::now()
+                    ]);
+                    if($stock){
+                        $stock->stock -= $request->jumlah;
+                        $stock->save();
+                    }
+                    return Response::json(['status'=>200]);
+                    break;
+            }
         }
     }
 

@@ -38,7 +38,7 @@
                                         </div>
                                         <div class="card-content">
                                             <div class="card-body">
-                                                <form action="<?= base_url()?>/pemakaian-obat" class="form form-horizontal" id="formpemakaian"
+                                                <form action="" class="form form-horizontal" id="formpemakaian"
                                                     method="post" enctype="multipart/form-data">
                                                     <div class="form-body">
                                                         <div class="row">
@@ -616,73 +616,73 @@
                     }
                 ]
             });
-            // $('#simpanp').on('click', function(e) {
-            //     e.preventDefault();
-            //     var url = "<?= base_url()?>/pemakaian-obat";
-            //     var formData = new FormData($('#formpemakaian')[0]);
-            //     $.ajax({
-            //         type: 'POST',
-            //         url: url,
-            //         processData: false, // Jangan memproses data
-            //         contentType: false,
-            //         data: formData,
-            //         dataType: 'json',
-            //         success: function(response) {
-            //             if (response.status === 200) {
-            //                 Swal.fire({
-            //                     title: 'Success',
-            //                     icon: 'success',
-            //                     text: 'Data berhasil ditambah',
-            //                     timerProgressBar: true,
-            //                     timer: 1500,
-            //                 }).then(function() {
-            //                     $('#formaddresin')[0].reset();
-            //                     reloadData();
-            //                 });
-            //                 $('#ics').focus();
-            //             } else if (response.status === 202) {
-            //                 Swal.fire({
-            //                     title: 'Error',
-            //                     icon: 'error',
-            //                     text: 'Karyawan sudah mengambil PAINKILLA lebih dari 2',
-            //                 });
-            //             } else if (response.status === 203) {
-            //                 Swal.fire({
-            //                     title: 'Error',
-            //                     icon: 'error',
-            //                     text: 'Karyawan mengambil PAINKILLA lebih dari 1',
-            //                 });
-            //             } else if (response.status === 204) {
-            //                 Swal.fire({
-            //                     title: 'Error',
-            //                     icon: 'error',
-            //                     text: 'Stock Obat sudah habis',
-            //                 });
+            $('#simpanp').on('click', function(e) {
+                e.preventDefault();
+                var url = "<?= base_url()?>/pemakaian-obat";
+                var formData = new FormData($('#formpemakaian')[0]);
+                $.ajax({
+                    type: 'POST',
+                    url: url,
+                    processData: false, // Jangan memproses data
+                    contentType: false,
+                    data: formData,
+                    dataType: 'json',
+                    success: function(response) {
+                        if (response.status === 200) {
+                            Swal.fire({
+                                title: 'Success',
+                                icon: 'success',
+                                text: 'Data berhasil ditambah',
+                                timerProgressBar: true,
+                                timer: 1500,
+                            }).then(function() {
+                                $('#formaddresin')[0].reset();
+                                reloadData();
+                            });
+                            $('#ics').focus();
+                        } else if (response.status === 202) {
+                            Swal.fire({
+                                title: 'Error',
+                                icon: 'error',
+                                text: 'Karyawan sudah mengambil PAINKILLA lebih dari 2',
+                            });
+                        } else if (response.status === 203) {
+                            Swal.fire({
+                                title: 'Error',
+                                icon: 'error',
+                                text: 'Karyawan mengambil PAINKILLA lebih dari 1',
+                            });
+                        } else if (response.status === 204) {
+                            Swal.fire({
+                                title: 'Error',
+                                icon: 'error',
+                                text: 'Stock Obat sudah habis',
+                            });
                             
-            //             } else if (response.status === 205) {
-            //                 Swal.fire({
-            //                     title: 'Error',
-            //                     icon: 'error',
-            //                     text: 'Jumlah yang diinput melebihi stock',
-            //                 });
-            //             } else {
-            //                 Swal.fire({
-            //                     title: 'Error',
-            //                     icon: 'error',
-            //                     text: 'Gagal membuat data | Data yang diinput melebihi stock',
-            //                 })
-            //             }
-            //         },
-            //         error: function(error) {
-            //             console.error(error);
-            //             Swal.fire({
-            //                 title: 'Error',
-            //                 icon: 'error',
-            //                 text: 'Error dalam melakukan fungsi',
-            //             })
-            //         }
-            //     })
-            // })
+                        } else if (response.status === 205) {
+                            Swal.fire({
+                                title: 'Error',
+                                icon: 'error',
+                                text: 'Jumlah yang diinput melebihi stock',
+                            });
+                        } else {
+                            Swal.fire({
+                                title: 'Error',
+                                icon: 'error',
+                                text: 'Gagal membuat data | Data yang diinput melebihi stock',
+                            })
+                        }
+                    },
+                    error: function(error) {
+                        console.error(error);
+                        Swal.fire({
+                            title: 'Error',
+                            icon: 'error',
+                            text: 'Error dalam melakukan fungsi',
+                        })
+                    }
+                })
+            })
             $('#simpanpm').on('click', function(e) {
                 e.preventDefault();
                 var url = "";
