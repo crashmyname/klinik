@@ -9,6 +9,7 @@ use Support\DataTables;
 use Support\Date;
 use Support\Http;
 use Support\Request;
+use Support\DB;
 use Support\Response;
 use Support\Session;
 use Support\Validator;
@@ -127,29 +128,34 @@ class PemakaianController
         $pemakaian->tgl_pemakaian = $request->tgl_pemakaian;
         $pemakaian->modify_by = Session::user()->username;
         $pemakaian->deleted_at = Date::Now();
-        $pemakaian->save();
+        DB::beginTransaction();
+        try{
+            $stock = Stock::query()
+                            ->where('id_obat','=',$pemakaian->jenis_obat)
+                            ->first();
+            $stock->stock += $request->jumlah;
+            $stock->stock -= $request->jumlah;
+            $stock->save();
+            $pemakaian->save();
+            DB::commit();
+        } catch(\Exception $e){
+            DB::rollback();
+            Response::json(['status'=>500,'message'=>$e->getMessage()]);
+        }
         return Response::json(['status'=>200]);
     }
 
     public function deletePemakaian(Request $request, $id)
     {
-        $this->beginTransaction();
-
-        try{
-            $pemakaian = Pemakaian::find($id);
-            $pemakaian->deleted_at = Date::now();
-            $pemakaian->deleted_by = Session::user()->username;
-            $stock = Stock::query()
-                            ->where('id_obat','=',$pemakaian->jenis_obat)
-                            ->first();
-            $stock->stock += $pemakaian->jumlah;
-            $stock->save();    
-            $pemakaian->save();
-            $this->commit();
-            return Response::json(['status'=>200]);
-        } catch (\Exception $e) {
-            $this->rollback();
-            return Response::json(['status' => 500, 'message' => $e->getMessage()]);
-        }
+        $pemakaian = Pemakaian::find($id);
+        $pemakaian->deleted_at = Date::now();
+        $pemakaian->deleted_by = Session::user()->username;
+        $stock = Stock::query()
+                        ->where('id_obat','=',$pemakaian->jenis_obat)
+                        ->first();
+        $stock->stock += $pemakaian->jumlah;
+        $stock->save();    
+        $pemakaian->save();
+        return Response::json(['status'=>200]);
     }
 }

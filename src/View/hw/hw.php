@@ -875,7 +875,7 @@
                 $.ajax({
                     type: "POST",
                     dataType: "json",
-                    url: "<?= base_url()?>/apiemp",
+                    url: "<?= base_url()?>/emp",
                     data: {
                         nik: nik,
                     },
@@ -894,7 +894,7 @@
                 $.ajax({
                     type: "POST",
                     dataType: "json",
-                    url: "<?= base_url()?>/apisect",
+                    url: "<?= base_url()?>/sect",
                     data: {
                         nik: nik,
                     },

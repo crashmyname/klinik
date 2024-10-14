@@ -1,5 +1,4 @@
 <?php
-use App\Controller\ApiController;
 session_start();
 use Support\Request;
 use Support\Route;
@@ -17,6 +16,7 @@ use App\Controller\ObatController;
 use App\Controller\PemakaianController;
 use App\Controller\UserController;
 use App\Controller\StockController;
+use App\Controller\ApiController;
 
 $request = new Request();
 $route = new Route($prefix);
@@ -34,10 +34,10 @@ $api = new ApiController();
 handleMiddleware();
 
 // API
-$route->post('/apiemp', function() use($api,$request){
+$route->post('/emp', function() use($api,$request){
     $api->DataApiNama($request);
 });
-$route->post('/apisect', function() use($api,$request){
+$route->post('/sect', function() use($api,$request){
     $api->DataApiSect($request);
 });
 
@@ -93,6 +93,15 @@ $route->get('/pemakaian-obat', function() use ($pemakaianController){
 $route->post('/pemakaian-obat', function() use($pemakaianController, $request){
     AuthMiddleware::checkLogin();
     $pemakaianController->addPemakaian($request);
+});
+$route->post('/upemakaian-obat', function() use($pemakaianController, $request){
+    AuthMiddleware::checkLogin();
+    $pemakaianController->updatePemakaian($request);
+});
+$route->post('/dpemakaian-obat', function() use($pemakaianController, $request){
+    AuthMiddleware::checkLogin();
+    $id = base64_decode($request->id);
+    $pemakaianController->deletePemakaian($request, $id);
 });
 
 // ALAT

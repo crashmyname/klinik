@@ -49,11 +49,14 @@
                                                                 <input list="datalist" id="nik" name="nik"
                                                                     class="form-control">
                                                                 <datalist id="datalist">
-                                                                    <option value="" disabled selected hidden> - </option>
+                                                                    <option value="" disabled selected hidden> -
+                                                                    </option>
                                                                     <?php foreach($res as $data): ?>
-                                                                        <?php foreach($data as $result=>$value): ?>
-                                                                        <option value="<?= $value['nik']?>"><?= $value['nik']?> <?= $value['nama']?></option>
-                                                                        <?php endforeach; ?>
+                                                                    <?php foreach($data as $result=>$value): ?>
+                                                                    <option value="<?= $value['nik'] ?>">
+                                                                        <?= $value['nik'] ?> <?= $value['nama'] ?>
+                                                                    </option>
+                                                                    <?php endforeach; ?>
                                                                     <?php endforeach; ?>
                                                                 </datalist>
                                                             </div>
@@ -90,9 +93,12 @@
                                                             <div class="col-md-8 form-group">
                                                                 <select type="text" name="jns_obat" id="jns_obat"
                                                                     class="form-control" required>
-                                                                    <option value="" disabled selected hidden> - </option>
+                                                                    <option value="" disabled selected hidden> -
+                                                                    </option>
                                                                     <?php foreach($obat as $data): ?>
-                                                                        <option value="<?= $data['id_obat']?>"><?= $data['nama_obat']?> | FACT <?= $data['factory']?></option>
+                                                                    <option value="<?= $data['id_obat'] ?>">
+                                                                        <?= $data['nama_obat'] ?> | FACT
+                                                                        <?= $data['factory'] ?></option>
                                                                     <?php endforeach;?>
                                                                 </select>
                                                             </div>
@@ -112,9 +118,8 @@
                                                                     class="form-control" name="tgl_pemakaian">
                                                             </div>
                                                             <div class="col-sm-12 d-flex justify-content-end">
-                                                                <button type="submit"
-                                                                    class="btn btn-primary me-1 mb-1" name="simpan"
-                                                                    id="simpanp"
+                                                                <button type="submit" class="btn btn-primary me-1 mb-1"
+                                                                    name="simpan" id="simpanp"
                                                                     onclick="return confirm('Apakah data yang anda masukkan sudah benar?')">Submit</button>
                                                                 <button type="reset"
                                                                     class="btn btn-light-secondary me-1 mb-1">Reset</button>
@@ -210,7 +215,7 @@
                                                                 <select type="text" name="jns_obat" id="jns_obatm"
                                                                     class="form-control" required>
                                                                     <option value=""> - </option>
-                                                                    
+
                                                                 </select>
                                                             </div>
                                                             <div class="col-md-4">
@@ -280,8 +285,7 @@
                                         </div>
                                         <div class="card-content">
                                             <div class="card-body">
-                                                <form class="form form-horizontal"
-                                                    action="" method="post"
+                                                <form class="form form-horizontal" action="" method="post"
                                                     enctype="multipart/form-data">
                                                     @csrf
                                                     <div class="form-body">
@@ -372,7 +376,6 @@
                                             <div class="card-body">
                                                 <form class="form form-horizontal" id="formuppemakaian"
                                                     action="" method="POST" enctype="multipart/form-data">
-                                                    @csrf
                                                     <div class="form-body">
                                                         <div class="row">
                                                             <div class="col-md-4">
@@ -417,7 +420,7 @@
                                                                 <select type="text" name="jns_obat" id="jns_obatm"
                                                                     class="form-control" required>
                                                                     <option value=""> - </option>
-                                                                    
+
                                                                 </select>
                                                             </div>
                                                             <div class="col-md-4">
@@ -462,8 +465,8 @@
                     </div>
                 </div>
             </div>
-            <button type="submit" id="deletepemakaian" title="delete pemakaian"
-                class="btn icon btn-outline-danger"><i class="bi bi-trash"></i> Hapus</button>
+            <button type="submit" id="btn-delete" title="delete pemakaian" class="btn icon btn-outline-danger"><i
+                    class="bi bi-trash"></i> Hapus</button>
             <div class="card-body">
                 <div class="table-responsive">
                     <table class="table table-bordered" id="datatables" width="100%" cellspacing="0">
@@ -501,13 +504,13 @@
     </div>
     <script type="text/javascript">
         $(document).ready(function() {
-            var prefix = "<?= base_url()?>";
+            var prefix = "<?= base_url() ?>";
             var dataTable = $('#datatables').DataTable({
                 processing: true,
                 serverSide: true,
                 responsive: true,
                 select: true,
-                ajax: prefix+'/pemakaian-obat',
+                ajax: prefix + '/pemakaian-obat',
                 columns: [{
                         data: 'id_pemakaian',
                         name: 'id_pemakaian',
@@ -545,7 +548,7 @@
                         name: 'tgl_pemakaian'
                     },
                 ],
-                lengthMenu: [10, 25, 50, 100, <?= $count?>],
+                lengthMenu: [10, 25, 50, 100, <?= $count ?>],
                 dom: 'Blfrtip',
                 // select: true,
                 buttons: [{
@@ -618,7 +621,7 @@
             });
             $('#simpanp').on('click', function(e) {
                 e.preventDefault();
-                var url = "<?= base_url()?>/pemakaian-obat";
+                var url = "<?= base_url() ?>/pemakaian-obat";
                 var formData = new FormData($('#formpemakaian')[0]);
                 $.ajax({
                     type: 'POST',
@@ -658,7 +661,7 @@
                                 icon: 'error',
                                 text: 'Stock Obat sudah habis',
                             });
-                            
+
                         } else if (response.status === 205) {
                             Swal.fire({
                                 title: 'Error',
@@ -803,6 +806,61 @@
 
                 $('#karyawanModal').modal('show'); // Tampilkan modal
             });
+            $('#btn-delete').on('click', function(e) {
+                e.preventDefault();
+                var selectedData = dataTable.rows({
+                    selected: true
+                }).data();
+                Swal.fire({
+                    title: 'Add',
+                    icon: 'warning',
+                    text: 'Apakah yakin ingin menghapus data?',
+                    showCancelButton: true,
+                    confirmButtonText: 'Ya, Hapus!!',
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        selectedData.each(function(data) {
+                            var iD = data.id_pemakaian;
+                            var encID = btoa(iD);
+                            var url = "<?= base_url() ?>/dpemakaian-obat?id=" + encID;
+                            $.ajax({
+                                type: 'POST',
+                                dataType: 'json',
+                                url: url,
+                                processData: false,
+                                contentType: false,
+                                success: function(response) {
+                                    if (response.status == 200) {
+                                        Swal.fire({
+                                            title: 'Success',
+                                            icon: 'success',
+                                            text: 'Pemakaian berhasil dihapus',
+                                        });
+                                        dataTable.ajax.reload();
+                                    } else {
+                                        Swal.fire({
+                                            title: 'Error',
+                                            icon: 'error',
+                                            text: 'Gagal menghapus pemakaian',
+                                        })
+                                    }
+                                },
+                                error: function(error) {
+                                    console.error(error);
+                                    Swal.fire({
+                                        title: 'error',
+                                        icon: 'error',
+                                        text: 'Terjadi kesalahan saat menghapus data',
+                                        showConfirmButton: false,
+                                        timer: 1500,
+                                        timerProgressBar: true,
+                                    });
+                                }
+                            })
+                        })
+                    }
+                })
+            })
         });
 
         $("#nik").change(function() {
@@ -810,14 +868,15 @@
             $.ajax({
                 type: "POST",
                 dataType: "json",
-                url: "<?= base_url()?>/apiemp",
+                url: "<?= base_url() ?>/emp",
                 data: {
                     nik: nik,
                 },
                 success: function(data) {
                     var options = '';
                     data.forEach(function(m) {
-                        options += "<option value='" + m.nama + "'>" + m.nama + "</option>";
+                        options += "<option value='" + m.nama + "'>" + m.nama +
+                            "</option>";
                     });
                     $("#nama").html(options);
                 }
@@ -829,14 +888,15 @@
             $.ajax({
                 type: "POST",
                 dataType: "json",
-                url: "<?= base_url()?>/apisect",
+                url: "<?= base_url() ?>/sect",
                 data: {
                     nik: sect,
                 },
                 success: function(data) {
                     var options = '';
                     data.forEach(function(m) {
-                        options += "<option value='" + m.kode_section + "'>" + m.kode_section +
+                        options += "<option value='" + m.kode_section + "'>" + m
+                            .kode_section +
                             "</option>";
                     });
                     $("#section").html(options);
