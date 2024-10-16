@@ -170,7 +170,6 @@
                                             <div class="card-body">
                                                 <form class="form form-horizontal" id="formpemakaianm" method="post"
                                                     enctype="multipart/form-data">
-                                                    @csrf
                                                     <div class="form-body">
                                                         <div class="row">
                                                             <div class="col-md-4">
@@ -214,8 +213,12 @@
                                                             <div class="col-md-8 form-group">
                                                                 <select type="text" name="jns_obat" id="jns_obatm"
                                                                     class="form-control" required>
-                                                                    <option value=""> - </option>
-
+                                                                    <option value="" disabled selected hidden> - </option>
+                                                                    <?php foreach($obat as $data): ?>
+                                                                    <option value="<?= $data['id_obat'] ?>">
+                                                                        <?= $data['nama_obat'] ?> | FACT
+                                                                        <?= $data['factory'] ?></option>
+                                                                    <?php endforeach;?>
                                                                 </select>
                                                             </div>
                                                             <div class="col-md-4">
@@ -260,10 +263,10 @@
                     </div>
                 </div>
             </div>
-            <button type="button" class="btn btn-outline-success block" data-bs-toggle="modal"
+            <!-- <button type="button" class="btn btn-outline-success block" data-bs-toggle="modal"
                 data-bs-target="#border-less3">
                 Tambah Data Excel
-            </button>
+            </button> -->
             <!-- BorderLess Modal Modal -->
             <div class="modal fade text-left modal-lg centered" id="border-less3" tabindex="-1" role="dialog"
                 aria-labelledby="myModalLabel1" aria-hidden="true">
@@ -345,126 +348,121 @@
                     </div>
                 </div>
             </div>
-            <button class="btn btn-outline-warning" data-bs-toggle="modal" data-bs-target="#modalEditPemakaian"
-                id="modalupdatepemakaian" title="Ubah Data"><svg xmlns="http://www.w3.org/2000/svg" width="25"
-                    height="25" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
-                    <path
-                        d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
-                    <path fill-rule="evenodd"
-                        d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z" />
-                </svg> Update Pemakaian</button>
-            <!-- BorderLess Modal Modal -->
-            <div class="modal fade text-left modal-lg centered" id="modalEditPemakaian" tabindex="-1"
-                role="dialog" aria-labelledby="myModalLabel1" aria-hidden="true">
-                <div class="modal-dialog modal-dialog-scrollable" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title">Update Data Pemakaian</h5>
-                            <button type="button" class="close rounded-pill" data-bs-dismiss="modal"
-                                aria-label="Close">
-                                <i data-feather="x"></i>
-                            </button>
-                        </div>
-                        <div class="modal-body">
-                            <div class="row match-height">
-                                <div class="col-md-12 col-12">
-                                    <div class="card">
-                                        <div class="card-header">
-                                            <h4 class="card-title">Form Update Pemakaian</h4>
-                                        </div>
-                                        <div class="card-content">
-                                            <div class="card-body">
-                                                <form class="form form-horizontal" id="formuppemakaian"
-                                                    action="" method="POST" enctype="multipart/form-data">
-                                                    <div class="form-body">
-                                                        <div class="row">
-                                                            <div class="col-md-4">
-                                                                <label>NIK</label>
-                                                            </div>
-                                                            <div class="col-md-8 form-group">
-                                                                <input type="text" id="unik"
-                                                                    class="form-control" name="nik"
-                                                                    placeholder="Masukan NIK">
-                                                            </div>
-                                                            <div class="col-md-4">
-                                                                <label>Nama</label>
-                                                            </div>
-                                                            <div class="col-md-8 form-group">
-                                                                <input type="text" id="namam"
-                                                                    class="form-control" name="nama"
-                                                                    placeholder="Masukan Nama"
-                                                                    style="text-transform:uppercase;">
-                                                            </div>
-                                                            <div class="col-md-4">
-                                                                <label>Section</label>
-                                                            </div>
-                                                            <div class="col-md-8 form-group">
-                                                                <input type="text" id="sectionm"
-                                                                    class="form-control" name="section"
-                                                                    placeholder="Masukan Nama Section"
-                                                                    style="text-transform:uppercase;">
-                                                            </div>
-                                                            <div class="col-md-4">
-                                                                <label>Keluhan</label>
-                                                            </div>
-                                                            <div class="col-md-8 form-group">
-                                                                <input type="text" id="keluhanm"
-                                                                    class="form-control" name="keluhan"
-                                                                    placeholder="Masukan Keluhan sakit"
-                                                                    style="text-transform:uppercase;">
-                                                            </div>
-                                                            <div class="col-md-4">
-                                                                <label>Jenis Obat</label>
-                                                            </div>
-                                                            <div class="col-md-8 form-group">
-                                                                <select type="text" name="jns_obat" id="jns_obatm"
-                                                                    class="form-control" required>
-                                                                    <option value=""> - </option>
-
-                                                                </select>
-                                                            </div>
-                                                            <div class="col-md-4">
-                                                                <label>Jumlah</label>
-                                                            </div>
-                                                            <div class="col-md-8 form-group">
-                                                                <input type="number" id="jumlahm"
-                                                                    class="form-control" name="jumlah"
-                                                                    placeholder="Masukan Jumlah Obat">
-                                                            </div>
-                                                            <div class="col-md-4">
-                                                                <label>Tanggal Pemakaian</label>
-                                                            </div>
-                                                            <div class="col-md-8 form-group">
-                                                                <input type="date" id="tgl_pemakaianm"
-                                                                    class="form-control" name="tgl_pemakaian">
-                                                            </div>
-                                                            <div class="col-sm-12 d-flex justify-content-end">
-                                                                <button type="submit"
-                                                                    class="btn btn-primary me-1 mb-1" name="simpan"
-                                                                    id="simpanpm"
-                                                                    onclick="return confirm('Apakah data yang anda masukkan sudah benar?')">Submit</button>
-                                                                <button type="reset"
-                                                                    class="btn btn-light-secondary me-1 mb-1">Reset</button>
+            <button class="btn btn-outline-warning" data-bs-toggle="modal" id="modalupdatePemakaian" title="Ubah Data"><svg
+                        xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor"
+                        class="bi bi-pencil-square" viewBox="0 0 16 16">
+                        <path
+                            d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
+                        <path fill-rule="evenodd"
+                            d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z" />
+                    </svg> Update Pemakaian</button>
+                <!-- BorderLess Modal Modal -->
+                <div class="modal fade text-left modal-lg centered" id="modalEditPemakaian" tabindex="-1" role="dialog"
+                    aria-labelledby="myModalLabel1" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-scrollable" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Update Data Pemakaian</h5>
+                                <button type="button" class="close rounded-pill" data-bs-dismiss="modal"
+                                    aria-label="Close">
+                                    <i data-feather="x"></i>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="row match-height">
+                                    <div class="col-md-12 col-12">
+                                        <div class="card">
+                                            <div class="card-header">
+                                                <h4 class="card-title">Form Pemakaian</h4>
+                                            </div>
+                                            <div class="card-content">
+                                                <div class="card-body">
+                                                    <form class="form form-horizontal" id="formuppemakaian" action=""
+                                                        method="POST" enctype="multipart/form-data">
+                                                        <div class="form-body">
+                                                            <div class="row">
+                                                                <div class="col-md-4">
+                                                                    <label>NIK</label>
+                                                                </div>
+                                                                <div class="col-md-8 form-group">
+                                                                    <input type="text" id="unik"
+                                                                        class="form-control" name="nik"
+                                                                        value="">
+                                                                </div>
+                                                                <div class="col-md-4">
+                                                                    <label>Nama Karyawan</label>
+                                                                </div>
+                                                                <div class="col-md-8 form-group">
+                                                                    <input type="text" id="unama"
+                                                                        class="form-control" name="nama"
+                                                                        value="">
+                                                                </div>
+                                                                <div class="col-md-4">
+                                                                    <label>Section</label>
+                                                                </div>
+                                                                <div class="col-md-8 form-group">
+                                                                    <input type="text" id="usection"
+                                                                        class="form-control" name="kode_section"
+                                                                        value="">
+                                                                </div>
+                                                                <div class="col-md-4">
+                                                                    <label>Keluhan</label>
+                                                                </div>
+                                                                <div class="col-md-8 form-group">
+                                                                    <input type="text" id="ukeluhan"
+                                                                        class="form-control" name="keluhan"
+                                                                        value="">
+                                                                </div>
+                                                                <div class="col-md-4">
+                                                                    <label>Jenis Obat</label>
+                                                                </div>
+                                                                <div class="col-md-8 form-group">
+                                                                    <input type="text" id="ujns_obat"
+                                                                        class="form-control" name="jenis_obat"
+                                                                        value="">
+                                                                </div>
+                                                                <div class="col-md-4">
+                                                                    <label>Jumlah</label>
+                                                                </div>
+                                                                <div class="col-md-8 form-group">
+                                                                    <input type="number" id="ujumlah"
+                                                                        class="form-control" name="jumlah"
+                                                                        value="">
+                                                                </div>
+                                                                <div class="col-md-4">
+                                                                    <label>Tanggal</label>
+                                                                </div>
+                                                                <div class="col-md-8 form-group">
+                                                                    <input type="date" id="utanggal"
+                                                                        class="form-control" name="tgl_pemakaian"
+                                                                        value="">
+                                                                </div>
+                                                                <div class="col-sm-12 d-flex justify-content-end">
+                                                                    <button type="submit"
+                                                                        class="btn btn-primary me-1 mb-1" name="update"
+                                                                        id="btnUpdatePemakaian">Submit</button>
+                                                                    <button type="reset"
+                                                                        class="btn btn-light-secondary me-1 mb-1">Reset</button>
+                                                                </div>
                                                             </div>
                                                         </div>
-                                                    </div>
-                                                </form>
+                                                    </form>
 
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-light-primary" data-bs-dismiss="modal">
-                                        <i class="bx bx-x d-block d-sm-none"></i>
-                                        <span class="d-none d-sm-block">Close</span>
-                                    </button>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-light-primary" data-bs-dismiss="modal">
+                                            <i class="bx bx-x d-block d-sm-none"></i>
+                                            <span class="d-none d-sm-block">Close</span>
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
             <button type="submit" id="btn-delete" title="delete pemakaian" class="btn icon btn-outline-danger"><i
                     class="bi bi-trash"></i> Hapus</button>
             <div class="card-body">
@@ -688,20 +686,16 @@
             })
             $('#simpanpm').on('click', function(e) {
                 e.preventDefault();
-                var url = "";
+                var url = "<?= base_url() ?>/pemakaian-obat";
                 var formData = new FormData($('#formpemakaianm')[0]);
                 $.ajax({
                     type: 'POST',
                     url: url,
                     processData: false, // Jangan memproses data
                     contentType: false,
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    },
                     data: formData,
                     dataType: 'json',
                     success: function(response) {
-                        console.log(response);
                         if (response.status === 200) {
                             Swal.fire({
                                 title: 'Success',
@@ -732,6 +726,13 @@
                                 icon: 'error',
                                 text: 'Stock Obat sudah habis',
                             });
+
+                        } else if (response.status === 205) {
+                            Swal.fire({
+                                title: 'Error',
+                                icon: 'error',
+                                text: 'Jumlah yang diinput melebihi stock',
+                            });
                         } else {
                             Swal.fire({
                                 title: 'Error',
@@ -749,7 +750,110 @@
                         })
                     }
                 })
-            })
+            });
+            $('#modalupdatePemakaian').on('click', function(e) {
+                    var select = dataTable.rows({
+                        selected: true
+                    }).data();
+                    var modalPemakaian = $('#selectedData');
+                    var nik = $('#unik');
+                    var nama = $('#unama');
+                    var section = $('#usection');
+                    var keluhan = $('#ukeluhan');
+                    var jns_obat = $('#ujns_obat');
+                    var jumlah = $('#ujumlah');
+                    var tanggal = $('#utanggal');
+                    modalPemakaian.empty();
+                    if (select.length > 0) {
+                        nik.val(select[0].nik);
+                        nama.val(select[0].nama);
+                        section.val(select[0].kode_section);
+                        keluhan.val(select[0].keluhan);
+                        jns_obat.val(select[0].jenis_obat);
+                        jumlah.val(select[0].jumlah);
+                        tanggal.val(select[0].tgl_pemakaian);
+                        $('#modalEditPemakaian').modal('show');
+                    } else {
+                        Swal.fire({
+                            icon: 'info',
+                            title: 'Info',
+                            text: 'No data selected.',
+                        });
+                    }
+                });
+                $('#btnUpdatePemakaian').on('click', function(e) {
+                    var select = dataTable.rows({
+                        selected: true
+                    }).data();
+                    e.preventDefault();
+                    if (select.length == 0) {
+                        Swal.fire({
+                            title: 'Error',
+                            icon: 'error',
+                            text: 'Tidak ada data yang dipilih!',
+                            showConfirmButton: false,
+                            timer: 1500,
+                            timerProgressBar: true,
+                        });
+                        return;
+                    }
+                    var row = select[0];
+                    var idP = row.id_pemakaian;
+                    var editPemakaian = "<?= base_url()?>" + '/upemakaian-obat?id=' + idP;
+                    var formID = '#formuppemakaian';
+                    Swal.fire({
+                        title: 'Update',
+                        icon: 'warning',
+                        text: 'Apakah yakin data ingin diubah?',
+                        showCancelButton: true,
+                        confirmButtonText: 'Yes, Update!!',
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            var formPemakaian = new FormData($(formID)[0]);
+                            $.ajax({
+                                type: 'POST',
+                                url: editPemakaian,
+                                data: formPemakaian,
+                                contentType: false,
+                                processData: false,
+                                dataType: 'json',
+                                success: function(response) {
+                                    if (response.status === 200) {
+                                        Swal.fire({
+                                            title: 'success',
+                                            icon: 'success',
+                                            text: 'Data berhasil diupdate',
+                                            showConfirmButton: false,
+                                            timer: 1500,
+                                            timerProgressBar: true,
+                                        })
+                                        reloadData();
+                                    } else {
+                                        Swal.fire({
+                                            title: 'error',
+                                            icon: 'error',
+                                            text: 'Data gagal diupdate',
+                                            showConfirmButton: false,
+                                            timer: 1500,
+                                            timerProgressBar: true,
+                                        })
+                                    }
+                                },
+                                error: function(error) {
+                                    console.error(error);
+                                    Swal.fire({
+                                        title: 'Error',
+                                        icon: 'error',
+                                        text: 'Terjadi kesalahan saat memperbarui data',
+                                        showConfirmButton: false,
+                                        timer: 1500,
+                                        timerProgressBar: true,
+                                    });
+                                }
+                            })
+                        }
+                    })
+                });
             $('#showModalButton').on('click', function() {
                 var selectedData = dataTable.rows({
                     selected: true

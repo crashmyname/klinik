@@ -5,6 +5,7 @@ use App\Model\Obat;
 use App\Model\Over;
 use App\Model\Pemakaian;
 use App\Model\Stock;
+use Support\Database;
 use Support\DataTables;
 use Support\Date;
 use Support\Http;
@@ -119,6 +120,7 @@ class PemakaianController
     public function updatePemakaian(Request $request, $id)
     {
         $pemakaian = Pemakaian::find($id);
+        $oldqty = $pemakaian->jumlah;
         $pemakaian->nik = $request->nik;
         $pemakaian->nama = $request->nama;
         $pemakaian->kode_section = $request->kode_section;
@@ -127,22 +129,23 @@ class PemakaianController
         $pemakaian->jumlah = $request->jumlah;
         $pemakaian->tgl_pemakaian = $request->tgl_pemakaian;
         $pemakaian->modify_by = Session::user()->username;
-        $pemakaian->deleted_at = Date::Now();
+        $pemakaian->updated_at = Date::Now();
         DB::beginTransaction();
         try{
             $stock = Stock::query()
                             ->where('id_obat','=',$pemakaian->jenis_obat)
                             ->first();
-            $stock->stock += $request->jumlah;
-            $stock->stock -= $request->jumlah;
-            $stock->save();
-            $pemakaian->save();
+                // $stock->updated(['stock' => $stock->stock + $oldqty]);
+                $stock->stock += $oldqty;
+                $stock->save();
+                $pemakaian->save();
+                $stock->updated(['stock' => $stock->stock - $request->jumlah]);
             DB::commit();
+            Response::json(['status'=>200]);
         } catch(\Exception $e){
             DB::rollback();
             Response::json(['status'=>500,'message'=>$e->getMessage()]);
         }
-        return Response::json(['status'=>200]);
     }
 
     public function deletePemakaian(Request $request, $id)

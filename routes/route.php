@@ -96,7 +96,8 @@ $route->post('/pemakaian-obat', function() use($pemakaianController, $request){
 });
 $route->post('/upemakaian-obat', function() use($pemakaianController, $request){
     AuthMiddleware::checkLogin();
-    $pemakaianController->updatePemakaian($request);
+    $id = $request->id;
+    $pemakaianController->updatePemakaian($request, $id);
 });
 $route->post('/dpemakaian-obat', function() use($pemakaianController, $request){
     AuthMiddleware::checkLogin();
