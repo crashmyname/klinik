@@ -10,6 +10,7 @@ use App\Model\User;
 use Support\Auth;
 use Support\Date;
 use Support\Request;
+use Support\Response;
 use Support\Session;
 use Support\Validator;
 use Support\View;
@@ -18,11 +19,6 @@ use Support\CSRFToken;
 class HomeController
 {
     // Controller logic here
-    protected $validator;
-    public function __construct()
-    {
-        $this->validator = new Validator();
-    }
 
     public function index()
     {
@@ -53,9 +49,11 @@ class HomeController
             'username' => 'required',
             'password' => 'required'
         ];
-        $error = $this->validator->validate($data, $rule);
+        $error = Validator::make($data, $rule);
         if($error){
-            Session::set('error', 'Username atau password tidak boleh kosong.');
+            // return Response::json(['status'=> 422, 'error' => $error]);
+            // pretty_print($error);
+            Session::set('error', $error);
             return View::redirectTo('/login');
         } else {
             $user = User::query()
@@ -72,7 +70,7 @@ class HomeController
                 ]);
                 View::redirectTo('/home');
             } else {
-                Session::set('error', 'Invalid Credentials');
+                Session::set('invalid', 'Invalid Credentials');
                 View::redirectTo('/login');
             }
         }

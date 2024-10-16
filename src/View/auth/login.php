@@ -6,8 +6,8 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Clinic - Login</title>
-    <link rel="icon" type="image/png" sizes="32x32" href="<?= asset('img/clinic.png')?>">
-    <link rel="icon" type="image/png" sizes="16x16" href="<?= asset('img/clinic.png')?>">
+    <link rel="icon" type="image/png" sizes="32x32" href="<?= asset('img/clinic.png') ?>">
+    <link rel="icon" type="image/png" sizes="16x16" href="<?= asset('img/clinic.png') ?>">
     <style>
         * {
             margin: 0px;
@@ -187,20 +187,38 @@
             background: #4520ff;
         }
     </style>
-    <script src="<?= module('sweetalert2/dist/sweetalert2.all.min.js')?>"></script>
+    <script src="<?= module('sweetalert2/dist/sweetalert2.all.min.js') ?>"></script>
 </head>
 
 <body>
     <?php if ($errormessage = \Support\Session::get('error')): ?>
-        <script>
-            Swal.fire({
-                title: 'Error!',
-                text: '<?= $errormessage?>',
-                icon: 'error',
-                confirmButtonText: 'OK'
-            });
-        </script>
-        <?php \Support\Session::unset('error'); // Menghapus pesan error setelah ditampilkan ?>
+    <script>
+        var errorMessage = '';
+        <?php foreach ($errormessage as $field => $messages): ?>
+        <?php foreach ($messages as $message): ?>
+        errorMessage += '<?= htmlspecialchars($message, ENT_QUOTES) ?>\n'; // Tambahkan setiap pesan ke string
+        <?php endforeach; ?>
+        <?php endforeach; ?>
+
+        Swal.fire({
+            title: 'Error!',
+            text: errorMessage,
+            icon: 'error',
+            confirmButtonText: 'OK'
+        });
+    </script>
+    <?php \Support\Session::unset('error'); ?>
+    <?php endif; ?>
+    <?php if ($errormessage = \Support\Session::get('invalid')): ?>
+    <script>
+        Swal.fire({
+            title: 'Error!',
+            text: '<?= $errormessage?>',
+            icon: 'error',
+            confirmButtonText: 'OK'
+        });
+    </script>
+    <?php \Support\Session::unset('error'); ?>
     <?php endif; ?>
     <div class="LoginPageContainer">
         <div class="LoginPageInnerContainer">
