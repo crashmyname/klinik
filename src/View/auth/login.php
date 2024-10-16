@@ -209,6 +209,7 @@
     </script>
     <?php \Support\Session::unset('error'); ?>
     <?php endif; ?>
+    
     <?php if ($errormessage = \Support\Session::get('invalid')): ?>
     <script>
         Swal.fire({

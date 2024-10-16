@@ -4,7 +4,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Clinic System</title>
+    <title>Clinic System - <?php switch($title){
+        case $title == 'Data Pemakaian Lebih':
+            echo 'Data Pemakaian Lebih';
+            break;
+        case $title == 'Data Pemakaian Obat':
+            echo 'Data Pemakaian Obat';
+            break;
+        case $title == 'Data Obat':
+            echo 'Data Obat';
+            break;
+        case $title == 'Data Alat':
+            echo 'Data Alat';
+            break;
+        case $title == 'Data User':
+            echo 'Data User';
+            break;
+        case $title == 'Data HW':
+            echo 'Data HW';
+            break;
+        case $title == 'Data MCU':
+            echo 'Data MCU';
+            break;
+        default:
+            echo 'Dashboard';
+            break;
+        }?></title>
 
     <link rel="stylesheet" href="<?= asset('mazer/assets/css/main/app.css') ?>">
     <link rel="stylesheet" href="<?= asset('mazer/assets/extensions/simple-datatables/style.css') ?>">
@@ -171,7 +196,7 @@
                                 <span>Data Permintaan Obat</span>
                             </a>
                         </li>
-                        <li class="sidebar-item ">
+                        <li class="sidebar-item <?= $title == 'Data Pemakaian Lebih' ? 'active' : '' ?>">
                             <a href="<?= 'pemakaian-lebih' ?>" class='sidebar-link'>
                                 <i class="bi bi-capsule-pill"></i>
                                 <span>Excess Data</span>

@@ -161,4 +161,29 @@ class PemakaianController
         $pemakaian->save();
         return Response::json(['status'=>200]);
     }
+
+    public function over(Request $request)
+    {
+        $title = 'Data Pemakaian Lebih';
+        if(Request::isAjax()){
+            $pemakaian = Over::query()
+            ->select('tb_offer.id_offer','tb_offer.nik','tb_offer.nama','tb_offer.kode_section','tb_offer.keluhan','tb_offer.jenis_obat','tb_obat.id_obat','tb_obat.nama_obat','tb_offer.jumlah','tb_offer.tgl_pemakaian','tb_offer.created_by','tb_offer.created_at','tb_offer.updated_by')
+            ->leftJoin('tb_obat','tb_offer.jenis_obat','=','tb_obat.id_obat')
+            ->where('tb_offer.deleted_at','=','')
+            ->get();
+            // $pemakaian = Over::all();
+            
+            return DataTables::of($pemakaian)->make(true);
+        }
+        $api = Http::get('http://10.203.68.47:90/fambook/config/newapi.php?action=getSimpleEmp&api_key=P@55W0RD');
+        $res = json_encode($api);
+        if($api['status'] == 200){
+            $res = $api['response'];
+        } else {
+            $res = [];
+        }
+        $count = Pemakaian::query()->count();
+        $obat = Obat::query()->select('id_obat','nama_obat','factory')->get();
+        View::render('excess/excess',['title'=>$title,'count'=>$count,'res'=>$res,'obat'=>$obat],'navbar/navbar');
+    }
 }

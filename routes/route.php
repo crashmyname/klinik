@@ -61,6 +61,10 @@ $route->get('/home', function() use ($homeController){
     $homeController->index();
 });
 
+$route->post('/encrypt-id', function() use($homeController, $request){
+    $homeController->encrypt($request);
+});
+
 // OBAT
 $route->get('/obat', function() use ($obatController){
     AuthMiddleware::checkLogin();
@@ -101,8 +105,14 @@ $route->post('/upemakaian-obat', function() use($pemakaianController, $request){
 });
 $route->post('/dpemakaian-obat', function() use($pemakaianController, $request){
     AuthMiddleware::checkLogin();
-    $id = base64_decode($request->id);
+    // $id = base64_decode($request->id);
+    $id = Crypto::decrypt($request->id);
     $pemakaianController->deletePemakaian($request, $id);
+});
+
+// Over Pemakaian
+$route->get('/pemakaian-lebih', function() use($pemakaianController, $request){
+    $pemakaianController->over($request);
 });
 
 // ALAT

@@ -8,6 +8,7 @@ use App\Model\Pemakaian;
 use App\Model\RestEmp;
 use App\Model\User;
 use Support\Auth;
+use Support\Crypto;
 use Support\Date;
 use Support\Request;
 use Support\Response;
@@ -36,6 +37,13 @@ class HomeController
         $mcu = Mcu::query()->count();
         $alat = Alat::query()->count();
         View::render('dashboard',['obat'=>$obat,'user'=>$user,'pemakaian'=>$pemakaian,'rest'=>$rest,'mcu'=>$mcu,'alat'=>$alat,'title'=>$title],'navbar/navbar');
+    }
+
+    public function encrypt(Request $request)
+    {
+        $id = $request->id;
+        $encID = Crypto::encrypt($id);
+        return Response::json(['status'=>200,'encID' => $encID]);
     }
 
     public function onLogin(Request $request)
