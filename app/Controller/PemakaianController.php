@@ -186,4 +186,13 @@ class PemakaianController
         $obat = Obat::query()->select('id_obat','nama_obat','factory')->get();
         View::render('excess/excess',['title'=>$title,'count'=>$count,'res'=>$res,'obat'=>$obat],'navbar/navbar');
     }
+
+    public function deleteOver(Request $request, $id)
+    {
+        $over = Over::find($id);
+        $over->deleted_at = Date::Now();
+        $over->deleted_by = Session::user()->username;
+        $over->save();
+        return Response::json(['status'=>200]);
+    }
 }

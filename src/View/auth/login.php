@@ -195,9 +195,9 @@
     <script>
         var errorMessage = '';
         <?php foreach ($errormessage as $field => $messages): ?>
-        <?php foreach ($messages as $message): ?>
-        errorMessage += '<?= htmlspecialchars($message, ENT_QUOTES) ?>\n'; // Tambahkan setiap pesan ke string
-        <?php endforeach; ?>
+            <?php foreach ($messages as $message): ?>
+                errorMessage += '<?= htmlspecialchars($message, ENT_QUOTES) ?>\n'; // Tambahkan setiap pesan ke string
+            <?php endforeach; ?>
         <?php endforeach; ?>
 
         Swal.fire({
@@ -242,12 +242,14 @@
                                     class="labelIcon"><span>Username*</span></label>
                             <input type="text" class="input" id="empId" placeholder="Enter your Username"
                                 name="username">
+                            <small id="usernameError" style="color:red;"></small> 
                         </div>
                         <div class="inputContainer">
                             <label class="label" for="emailAddress"><img src="https://i.imgur.com/g5SvdfG.png"
                                     class="labelIcon"><span>Password*</span></label>
                             <input type="password" class="input" id="PassId" placeholder="Enter your Password"
                                 name="password">
+                            <small id="passwordError" style="color:red;"></small>
                         </div>
                         <div class="OptionsContainer">
                             <a href="#" class="ForgotPasswordLink">Forgot Password?</a>
@@ -259,5 +261,29 @@
         </div>
     </div>
 </body>
+<script type="text/javascript">
+    document.getElementById('empId').addEventListener('input', function(){
+        const usernameInput = this.value;
+        const errorMessage = document.getElementById('usernameError');
+
+        if(usernameInput == ''){
+            errorMessage.textContent = "Username is required.";
+        } else if(usernameInput.length <= 3){
+            errorMessage.textContent = 'Username must be at least 3 characters';
+        } else {
+            errorMessage.textContent = "";
+        }
+    });
+    document.getElementById('PassId').addEventListener('input', function(){
+        const passwordInput = this.value;
+        const errorMessageP = document.getElementById('passwordError');
+
+        if(passwordInput == ''){
+            errorMessageP.textContent = "Password is required.";
+        } else {
+            errorMessageP.textContent = '';
+        }
+    })
+</script>
 
 </html>

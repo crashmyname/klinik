@@ -112,7 +112,13 @@ $route->post('/dpemakaian-obat', function() use($pemakaianController, $request){
 
 // Over Pemakaian
 $route->get('/pemakaian-lebih', function() use($pemakaianController, $request){
+    AuthMiddleware::checkLogin();
     $pemakaianController->over($request);
+});
+$route->post('/dover-obat', function() use($pemakaianController, $request){
+    AuthMiddleware::checkLogin();
+    $id = Crypto::decrypt($request->id);
+    $pemakaianController->deleteOver($request,$id);
 });
 
 // ALAT
